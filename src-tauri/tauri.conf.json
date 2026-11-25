@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "An Inspector Calls",
+  "version": "1.0.0",
+  "identifier": "com.djayres.inspectorcalls",
+  "build": { "frontendDist": "../app" },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "main",
+        "title": "An Inspector Calls",
+        "width": 520,
+        "height": 660,
+        "resizable": false,
+        "maximizable": false,
+        "center": true,
+        "backgroundColor": "#11392d"
+      }
+    ],
+    "security": { "csp": null }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis"],
+    "publisher": "An Inspector Calls",
+    "shortDescription": "Local plan examination workspace",
+    "icon": ["../resources/icon.png", "../resources/icon.ico"],
+    "windows": {
+      "nsis": { "installMode": "currentUser", "installerIcon": "../resources/icon.ico" }
+    }
+  }
+}

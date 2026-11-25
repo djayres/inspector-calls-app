@@ -20,19 +20,20 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 22
-          cache: npm
 
-      - name: Install packages
-        run: npm ci
+      - uses: dtolnay/rust-toolchain@stable
 
-      - name: Set version (build number goes up every run)
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Build the Windows installer (Tauri, a few MB)
         shell: bash
-        run: npm version "1.0.${{ github.run_number }}" --no-git-tag-version --allow-same-version
-
-      - name: Build the Windows installer
-        env:
-          CSC_IDENTITY_AUTO_DISCOVERY: "false"
-        run: npx electron-builder --win nsis --publish never
+        run: |
+          npx --yes @tauri-apps/cli@2 build --bundles nsis --config '{"version":"1.0.${{ github.run_number }}"}'
+          mkdir -p dist
+          cp src-tauri/target/release/bundle/nsis/*-setup.exe dist/Inspector-Calls-Setup.exe
+          ls -l dist
 
       - uses: actions/upload-artifact@v4
         with:
@@ -44,8 +45,9 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          SIZE=$(du -h dist/Inspector-Calls-Setup.exe | cut -f1)
           gh release delete latest --yes --cleanup-tag || true
           gh release create latest dist/Inspector-Calls-Setup.exe \
             --title "An Inspector Calls for Windows (build ${{ github.run_number }})" \
-            --notes "Built $(date -u '+%d %b %Y %H:%M') UTC. Download Inspector-Calls-Setup.exe and run it to install. Windows may say it protected your PC because the app isn't code-signed: choose More info, then Run anyway." \
+            --notes "Built $(date -u '+%d %b %Y %H:%M') UTC. Installer size: ${SIZE}. Download Inspector-Calls-Setup.exe and run it to install. Windows may say it protected your PC because the app isn't code-signed: choose More info, then Run anyway." \
             --latest

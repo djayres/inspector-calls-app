@@ -3,7 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src 'self'">
 <title>An Inspector Calls</title>
 <style>
 html,body{margin:0;height:100%}
@@ -21,7 +20,6 @@ input{min-height:52px;border-radius:14px;border:0;padding:0 16px;font:18px syste
 button{min-height:52px;padding:0 28px;border-radius:26px;border:0;background:#e7c77f;color:#10291f;font:700 17px system-ui,sans-serif}
 .change{background:none;border:0;color:#fff;opacity:.6;font:14px system-ui,sans-serif;min-height:44px;padding:0 12px;text-decoration:underline}
 [hidden]{display:none!important}
-.drag{position:fixed;inset:0 0 auto 0;height:34px;-webkit-app-region:drag}
 body{user-select:none}input{user-select:text}
 @keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
@@ -30,7 +28,6 @@ body{user-select:none}input{user-select:text}
 </style>
 </head>
 <body>
-<div class="drag"></div>
 <img src="logo.svg" alt="An Inspector Calls">
 <h1>An Inspector Calls</h1>
 <h2 id="hi"></h2>
@@ -60,8 +57,9 @@ body{user-select:none}input{user-select:text}
 
   function open(){
     if(busy||!name)return; busy=true;
-    if(window.ic&&window.ic.open){
-      window.ic.open().then(function(how){ $("sub").textContent="Opening your examination in "+how+"…"; },
+    var T=window.__TAURI__;
+    if(T&&T.core&&T.core.invoke){
+      T.core.invoke("open_workspace").then(function(how){ $("sub").textContent="Opening your examination in "+how+"…"; },
         function(){ $("sub").textContent="Couldn't open the workspace. Click below to try again.";$("open").hidden=false;busy=false; });
     } else { location.href=URL_IC; }
   }

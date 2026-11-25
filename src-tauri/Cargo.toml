@@ -1,0 +1,19 @@
+[package]
+name = "inspector-calls"
+version = "1.0.0"
+description = "An Inspector Calls desktop launcher"
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+
+# Small, fast launcher
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
