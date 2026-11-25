@@ -1,6 +1,10 @@
-# An Inspector Calls (Android)
+# An Inspector Calls (Windows)
 
-A small Android app with the IC badge. Opening it greets the inspector by name ("Good afternoon, Inspector Smith")
-and then opens the An Inspector Calls workspace (https://claude.ai/artifact/Dq6idUVy5f5mZRYDLS4iuQ) in a Chrome tab,
-so it uses the inspector's existing Claude login and connections. Built by GitHub Actions on every push; the latest
-APK is on the Releases page (tag `latest`).
+A small Windows desktop app with the IC badge. Opening it greets the inspector by name
+("Good afternoon, Inspector Smith") and then opens the An Inspector Calls workspace
+(https://claude.ai/artifact/Dq6idUVy5f5mZRYDLS4iuQ) in its own Chrome app window (or Edge if
+Chrome isn't installed), so it uses the inspector's existing Claude login and connections.
+
+Built by GitHub Actions on every push (Electron + electron-builder). The latest installer,
+`Inspector-Calls-Setup.exe`, is on the Releases page (tag `latest`). The installer is not
+code-signed, so Windows SmartScreen may warn on first run: choose More info, then Run anyway.
