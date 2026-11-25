@@ -1,0 +1,7 @@
+{
+  "appId": "com.djayres.inspectorcalls",
+  "appName": "Inspector Calls",
+  "webDir": "www",
+  "android": { "backgroundColor": "#11392d" },
+  "plugins": { "SystemBars": { "insetsHandling": "css", "style": "LIGHT" } }
+}

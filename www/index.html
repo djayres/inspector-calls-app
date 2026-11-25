@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>An Inspector Calls</title>
+<style>
+html,body{margin:0;height:100%}
+body{background:radial-gradient(circle at 50% 38%,#23664f 0,#11392d 50%,#0a241d 100%);color:#fff;font:16px/1.4 system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:env(safe-area-inset-top) 24px env(safe-area-inset-bottom);box-sizing:border-box;text-align:center}
+img{width:168px;height:168px;border-radius:38px;box-shadow:0 16px 48px rgba(0,0,0,.4);animation:pop .7s cubic-bezier(.2,1.4,.4,1) both}
+h1{margin:0;font-size:32px;font-weight:300;letter-spacing:.2px;animation:fade .6s .2s both}
+h2{margin:-10px 0 0;font-size:20px;font-weight:400;color:#c3ead9;animation:fade .6s .35s both}
+h2:empty{display:none}
+p{margin:0;opacity:.8;font-size:15px;animation:fade .6s .45s both}
+.bar{width:120px;height:3px;border-radius:2px;background:rgba(255,255,255,.2);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:#e7c77f}
+.bar.run i{animation:load 1.8s .2s ease-in-out forwards}
+form{display:flex;flex-direction:column;gap:12px;width:min(320px,100%);animation:fade .5s both}
+input{min-height:52px;border-radius:14px;border:0;padding:0 16px;font:18px system-ui,sans-serif;text-align:center;color:#0f3b2e}
+button{min-height:52px;padding:0 28px;border-radius:26px;border:0;background:#e7c77f;color:#10291f;font:700 17px system-ui,sans-serif}
+.change{background:none;border:0;color:#fff;opacity:.6;font:14px system-ui,sans-serif;min-height:44px;padding:0 12px;text-decoration:underline}
+[hidden]{display:none!important}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes load{to{width:100%}}
+@media (prefers-reduced-motion:reduce){img,h1,h2,p,form,.bar i{animation:none}.bar.run i{width:100%}}
+</style>
+</head>
+<body>
+<img src="logo.svg" alt="An Inspector Calls">
+<h1>An Inspector Calls</h1>
+<h2 id="hi"></h2>
+<p id="sub"></p>
+
+<form id="who" hidden>
+  <input id="name" autocomplete="family-name" placeholder="Your surname, e.g. Smith" aria-label="Your surname" maxlength="40">
+  <button type="submit">Come in</button>
+</form>
+
+<div class="bar" id="bar" hidden><i></i></div>
+<button id="open" hidden>Open An Inspector Calls</button>
+<button class="change" id="change" hidden>Not you? Change name</button>
+
+<script>
+(function(){
+  // The An Inspector Calls workspace. Each person's data is private to their own Claude account.
+  var URL_IC="https://claude.ai/artifact/Dq6idUVy5f5mZRYDLS4iuQ";
+  var $=function(id){return document.getElementById(id)};
+  function load(){try{return localStorage.getItem("ic_name")||""}catch(e){return ""}}
+  function save(n){try{localStorage.setItem("ic_name",n)}catch(e){}}
+  function forget(){try{localStorage.removeItem("ic_name")}catch(e){}}
+  function plugins(){var c=window.Capacitor;return c&&c.Plugins?c.Plugins:{}}
+  var name=load(), busy=false, timer=null;
+
+  function greeting(n){var h=new Date().getHours();
+    return (h<5||h>=22?"Working late, ":h<12?"Good morning, ":h<17?"Good afternoon, ":"Good evening, ")+"Inspector "+n}
+
+  function open(){
+    if(busy||!name)return; busy=true;
+    var B=plugins().Browser;
+    var done=function(){setTimeout(function(){busy=false},1500)};
+    if(B&&B.open){
+      B.open({url:URL_IC,toolbarColor:"#11392d"}).then(done,function(){
+        $("sub").textContent="Couldn't open Chrome. Tap below to try again.";$("open").hidden=false;done();});
+    } else { location.href=URL_IC; }
+  }
+
+  function splash(){
+    $("who").hidden=true;
+    $("hi").textContent=greeting(name);
+    $("sub").textContent="Opening your examination…";
+    var bar=$("bar");bar.hidden=false;bar.classList.remove("run");void bar.offsetWidth;bar.classList.add("run");
+    $("change").hidden=false;
+    clearTimeout(timer);
+    var tries=0;
+    timer=setTimeout(function go(){ if(plugins().Browser||++tries>10){open()} else timer=setTimeout(go,150) },2000);
+  }
+
+  function ask(){
+    clearTimeout(timer);
+    $("hi").textContent="Welcome, Inspector";
+    $("sub").textContent="What should I call you?";
+    $("bar").hidden=true;$("open").hidden=true;$("change").hidden=true;
+    $("who").hidden=false;$("name").value="";
+    setTimeout(function(){$("name").focus()},300);
+  }
+
+  $("who").addEventListener("submit",function(e){
+    e.preventDefault();
+    var n=$("name").value.trim().replace(/\s+/g," ").replace(/^inspector\s+/i,"");
+    if(!n){$("name").focus();return}
+    n=n.charAt(0).toUpperCase()+n.slice(1);
+    name=n;save(n);splash();
+  });
+  $("open").addEventListener("click",open);
+  $("change").addEventListener("click",function(){forget();name="";ask()});
+
+  if(name)splash();else ask();
+
+  var App=plugins().App;
+  if(App&&App.addListener){ App.addListener("appStateChange",function(s){ if(s.isActive&&name){ setTimeout(open,600) } }); }
+  var B=plugins().Browser;
+  if(B&&B.addListener){ B.addListener("browserFinished",function(){ var A=plugins().App; if(A&&A.minimizeApp)A.minimizeApp(); }); }
+})();
+</script>
+</body>
+</html>
