@@ -46,8 +46,16 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           SIZE=$(du -h dist/Inspector-Calls-Setup.exe | cut -f1)
-          gh release delete latest --yes --cleanup-tag || true
-          gh release create latest dist/Inspector-Calls-Setup.exe \
-            --title "An Inspector Calls for Windows (build ${{ github.run_number }})" \
-            --notes "Built $(date -u '+%d %b %Y %H:%M') UTC. Installer size: ${SIZE}. Download Inspector-Calls-Setup.exe and run it to install. Windows may say it protected your PC because the app isn't code-signed: choose More info, then Run anyway." \
-            --latest
+          TITLE="An Inspector Calls for Windows (build ${{ github.run_number }})"
+          NOTES="Built $(date -u '+%d %b %Y %H:%M') UTC. Installer size: ${SIZE}. Download Inspector-Calls-Setup.exe and run it to install. Windows may say it protected your PC because the app isn't code-signed: choose More info, then Run anyway."
+          # Retry, because the GitHub API sometimes answers 500 for a moment.
+          for i in 1 2 3 4 5; do
+            if gh release view latest >/dev/null 2>&1; then
+              gh release upload latest dist/Inspector-Calls-Setup.exe --clobber &&
+              gh release edit latest --title "$TITLE" --notes "$NOTES" --latest && exit 0
+            else
+              gh release create latest dist/Inspector-Calls-Setup.exe --target "$GITHUB_SHA" --title "$TITLE" --notes "$NOTES" --latest && exit 0
+            fi
+            sleep $((i * 15))
+          done
+          exit 1
