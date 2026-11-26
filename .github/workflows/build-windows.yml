@@ -6,6 +6,9 @@ on:
     branches: [main]
     paths-ignore:
       - "README.md"
+      - "HANDOVER.md"
+      - "source/**"
+      - ".github/copilot-instructions.md"
   workflow_dispatch: {}
 
 permissions:

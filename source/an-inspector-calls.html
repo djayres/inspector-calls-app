@@ -1,0 +1,1482 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>An Inspector Calls</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,600&display=swap">
+<style>
+/* Layout: fixed left rail (sections of the examination) + one working canvas; rail folds into a top strip on phones. */
+:root {
+  --bg: #F2F3F0; --surface: #FFFFFF; --surface-2: #EBEEEA; --rail: #E6EAE5;
+  --ink: #1B2420; --ink-2: #48544E; --ink-3: #78837D; --line: #D9DED8; --line-2: #C6CDC6;
+  --accent: #2B5A4B; --accent-ink: #FFFFFF; --accent-soft: #DFEAE4; --accent-2: #8A6A2E;
+  --ok: #2E7A4C; --ok-soft: #DDEEE3; --warn: #9A6210; --warn-soft: #F5E9D3; --bad: #A3392F; --bad-soft: #F5DFDC; --info: #2F5E88; --info-soft: #DEE8F2;
+  --mark: #F3E3A6; --shadow: 0 1px 2px rgba(20,30,25,.06), 0 4px 16px rgba(20,30,25,.05);
+  --f-display: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --f-body: "Hanken Grotesk", "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111513; --surface: #181D1B; --surface-2: #202725; --rail: #151A18;
+  --ink: #E4E9E6; --ink-2: #B0BAB4; --ink-3: #828E88; --line: #2B3330; --line-2: #3A4440;
+  --accent: #82BCA8; --accent-ink: #0E1915; --accent-soft: #1E302A; --accent-2: #D3B06C;
+  --ok: #72C394; --ok-soft: #1B3326; --warn: #E2AE58; --warn-soft: #3A2E17; --bad: #EA8A80; --bad-soft: #3D211E; --info: #8DB8E2; --info-soft: #1B2A3A;
+  --mark: #5B4E1E; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #111513; --surface: #181D1B; --surface-2: #202725; --rail: #151A18;
+  --ink: #E4E9E6; --ink-2: #B0BAB4; --ink-3: #828E88; --line: #2B3330; --line-2: #3A4440;
+  --accent: #82BCA8; --accent-ink: #0E1915; --accent-soft: #1E302A; --accent-2: #D3B06C;
+  --ok: #72C394; --ok-soft: #1B3326; --warn: #E2AE58; --warn-soft: #3A2E17; --bad: #EA8A80; --bad-soft: #3D211E; --info: #8DB8E2; --info-soft: #1B2A3A;
+  --mark: #5B4E1E; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.25); color-scheme: dark; }
+
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+* { box-sizing: border-box; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.app { display: grid; grid-template-columns: 240px minmax(0,1fr); min-height: 100%; }
+
+/* Rail */
+.rail { background: var(--rail); border-right: 1px solid var(--line); padding-block: 22px 18px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: 16px; display: flex; flex-direction: column; gap: 22px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.brand { display: flex; align-items: center; gap: 10px; padding: 0 6px; }
+.brand-mark { width: 36px; height: 36px; flex: none; display: block; }
+.brand-mark svg { display: block; filter: drop-shadow(0 1px 2px rgba(20,30,25,.18)); }
+.brand-name { font-family: var(--f-display); font-size: 19px; font-weight: 600; letter-spacing: -.01em; line-height: 1.1; }
+.brand-sub { font-size: 11px; color: var(--ink-3); letter-spacing: .04em; }
+.nav { display: flex; flex-direction: column; gap: 2px; }
+.nav-group { font-size: 10.5px; text-transform: uppercase; letter-spacing: .09em; color: var(--ink-3); padding: 12px 10px 4px; font-weight: 500; }
+.nav a { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 7px; color: var(--ink-2); text-decoration: none; font-weight: 500; font-size: 13.5px; white-space: nowrap; }
+.nav a svg { flex: none; opacity: .8; }
+.nav a:hover { background: var(--surface-2); color: var(--ink); }
+.nav a.on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+.nav a.on svg { color: var(--accent); opacity: 1; }
+.nav .count { margin-left: auto; font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.conn { margin-top: auto; display: flex; flex-direction: column; gap: 6px; padding: 12px 10px 0; border-top: 1px solid var(--line); }
+.conn-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-2); }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ink-3); flex: none; }
+.dot.ok { background: var(--ok); } .dot.warn { background: var(--warn); } .dot.bad { background: var(--bad); }
+
+/* Main */
+.main { min-width: 0; padding-block: 28px 64px; padding-left: max(16px, 3vw); padding-right: max(16px, env(safe-area-inset-right, 0px), 3vw); }
+.wrap { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
+.head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--accent); font-weight: 600; }
+h1 { font-family: var(--f-display); font-weight: 500; font-size: clamp(26px, 3.2vw, 34px); line-height: 1.15; margin: 4px 0 0; letter-spacing: -.01em; text-wrap: balance; }
+h2 { font-family: var(--f-display); font-weight: 600; font-size: 19px; margin: 0; letter-spacing: -.005em; }
+h3 { font-size: 13px; font-weight: 600; margin: 0; }
+.lede { color: var(--ink-2); max-width: 68ch; margin: 6px 0 0; }
+.muted { color: var(--ink-3); }
+.small { font-size: 12px; }
+.mono { font-family: var(--f-mono); font-size: 12px; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; min-width: 0; }
+.card.flush { padding: 0; }
+.card-h { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px; }
+.split { display: grid; grid-template-columns: 300px minmax(0,1fr); gap: 18px; align-items: start; }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.stack { display: flex; flex-direction: column; gap: 10px; }
+
+/* Controls */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid var(--line-2); background: var(--surface); color: var(--ink); padding: 7px 12px; border-radius: 7px; cursor: pointer; font-weight: 500; font-size: 13px; line-height: 1.2; white-space: nowrap; text-decoration: none; }
+.btn:hover { border-color: var(--ink-3); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.ghost { border-color: transparent; background: transparent; color: var(--ink-2); }
+.btn.ghost:hover { background: var(--surface-2); color: var(--ink); }
+.btn.danger { color: var(--bad); }
+.btn.sm { padding: 4px 9px; font-size: 12px; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.input, .select, .textarea { width: 100%; border: 1px solid var(--line-2); background: var(--surface); border-radius: 7px; padding: 8px 10px; min-width: 0; }
+.textarea { resize: vertical; line-height: 1.55; }
+.input:focus, .select:focus, .textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+label.f { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--ink-2); font-weight: 500; min-width: 0; }
+.seg { display: inline-flex; background: var(--surface-2); border-radius: 8px; padding: 3px; gap: 2px; }
+.seg button { border: 0; background: transparent; padding: 5px 12px; border-radius: 6px; cursor: pointer; color: var(--ink-2); font-size: 12.5px; font-weight: 500; }
+.seg button.on { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+.chip { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--line-2); background: var(--surface); border-radius: 999px; padding: 4px 10px; font-size: 12px; color: var(--ink-2); cursor: pointer; text-align: left; }
+.chip:hover { border-color: var(--accent); color: var(--ink); }
+.pill { display: inline-flex; align-items: center; gap: 4px; border-radius: 999px; padding: 2px 8px; font-size: 11px; font-weight: 600; letter-spacing: .02em; white-space: nowrap; background: var(--surface-2); color: var(--ink-2); }
+.pill.ok { background: var(--ok-soft); color: var(--ok); } .pill.warn { background: var(--warn-soft); color: var(--warn); } .pill.bad { background: var(--bad-soft); color: var(--bad); } .pill.info { background: var(--info-soft); color: var(--info); } .pill.acc { background: var(--accent-soft); color: var(--accent); }
+.pill.ex { background: transparent; border: 1px dashed var(--line-2); color: var(--ink-3); font-weight: 500; }
+
+/* Stats */
+.stats { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 12px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; min-width: 0; cursor: pointer; text-align: left; }
+.stat:hover { border-color: var(--line-2); }
+.stat .n { font-family: var(--f-display); font-size: 28px; font-weight: 500; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.stat .l { font-size: 12px; color: var(--ink-2); }
+.stat .s { font-size: 11.5px; color: var(--ink-3); margin-top: 2px; }
+
+/* Stage stepper */
+.stepper { display: grid; grid-template-columns: repeat(7, minmax(0,1fr)); gap: 4px; margin-top: 16px; }
+.step { display: flex; flex-direction: column; gap: 6px; font-size: 11.5px; color: var(--ink-3); cursor: pointer; background: none; border: 0; padding: 0; text-align: left; }
+.step i { display: block; height: 4px; border-radius: 2px; background: var(--line); }
+.step.done i { background: var(--accent); opacity: .55; } .step.cur i { background: var(--accent); }
+.step.cur { color: var(--ink); font-weight: 600; } .step.done { color: var(--ink-2); }
+
+/* Lists */
+.list { display: flex; flex-direction: column; }
+.li { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-top: 1px solid var(--line); min-width: 0; }
+.li:first-child { border-top: 0; }
+.li .grow { flex: 1; min-width: 0; }
+.date-badge { flex: none; width: 46px; text-align: center; border: 1px solid var(--line); border-radius: 8px; padding: 3px 0; line-height: 1.1; }
+.date-badge b { display: block; font-family: var(--f-display); font-size: 18px; font-weight: 600; }
+.date-badge span { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); }
+
+/* Tables */
+.tbl-wrap { overflow-x: auto; }
+table.tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+.tbl th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-3); font-weight: 600; padding: 10px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; background: var(--surface); }
+.tbl td { padding: 6px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.tbl tr:last-child td { border-bottom: 0; }
+.tbl tr:hover td { background: color-mix(in srgb, var(--surface-2) 45%, transparent); }
+.tbl .cell { width: 100%; border: 1px solid transparent; background: transparent; border-radius: 5px; padding: 4px 6px; min-width: 0; }
+.tbl .cell:hover { border-color: var(--line); }
+.tbl .cell:focus { outline: none; border-color: var(--accent); background: var(--surface); }
+.tbl textarea.cell { resize: vertical; min-height: 32px; line-height: 1.45; field-sizing: content; }
+.tbl .num { font-variant-numeric: tabular-nums; }
+
+/* Drop zone */
+.drop { border: 1.5px dashed var(--line-2); border-radius: 12px; padding: 28px 20px; text-align: center; background: var(--surface); cursor: pointer; transition: border-color .15s, background .15s; }
+.drop:hover, .drop.over { border-color: var(--accent); background: var(--accent-soft); }
+.drop h2 { margin-top: 8px; }
+.bar { height: 4px; background: var(--surface-2); border-radius: 2px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--accent); transition: width .2s; }
+
+/* Answers */
+.convo { display: flex; flex-direction: column; gap: 16px; }
+.qa { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.qa-q { padding: 14px 18px; border-bottom: 1px solid var(--line); display: flex; gap: 10px; align-items: baseline; background: var(--surface-2); }
+.qa-q .q { font-weight: 600; flex: 1; min-width: 0; }
+.qa-a { padding: 16px 20px; min-width: 0; }
+.activity { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 18px; border-bottom: 1px solid var(--line); font-size: 11.5px; color: var(--ink-3); }
+.activity span { background: var(--surface-2); border-radius: 5px; padding: 2px 7px; }
+.qa-f { display: flex; gap: 6px; flex-wrap: wrap; padding: 10px 18px; border-top: 1px solid var(--line); }
+.thinking { color: var(--ink-3); display: flex; gap: 8px; align-items: center; }
+.pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { opacity: .25; transform: scale(.8);} 50% { opacity: 1; transform: scale(1);} }
+@media (prefers-reduced-motion: reduce) { .pulse { animation: none; } }
+
+.md { max-width: 78ch; line-height: 1.62; }
+.md > :first-child { margin-top: 0; } .md > :last-child { margin-bottom: 0; }
+.md p { margin: 0 0 10px; }
+.md h3, .md h4, .md h5, .md h6 { font-family: var(--f-display); font-size: 16.5px; font-weight: 600; margin: 18px 0 6px; }
+.md ul, .md ol { margin: 0 0 10px; padding-left: 22px; } .md li { margin: 3px 0; }
+.md blockquote { margin: 0 0 10px; padding: 6px 12px; border-left: 3px solid var(--line-2); color: var(--ink-2); font-style: italic; }
+.md code { font-family: var(--f-mono); font-size: 12px; background: var(--surface-2); padding: 1px 4px; border-radius: 4px; }
+.md table { border-collapse: collapse; margin: 0 0 12px; font-size: 13px; }
+.md th, .md td { border: 1px solid var(--line); padding: 5px 8px; text-align: left; vertical-align: top; }
+.md th { background: var(--surface-2); }
+.cite { display: inline-flex; align-items: center; gap: 3px; font-family: var(--f-mono); font-size: 11px; background: var(--accent-soft); color: var(--accent); border: 0; border-radius: 4px; padding: 0 5px; margin: 0 1px; cursor: pointer; vertical-align: 1px; line-height: 1.6; }
+.cite:hover { text-decoration: underline; }
+.cite.mail { background: var(--info-soft); color: var(--info); }
+mark { background: var(--mark); color: inherit; border-radius: 2px; padding: 0 1px; }
+
+/* Email thread cards */
+.mail-card { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); min-width: 0; }
+.mail-card .subj { font-weight: 600; overflow-wrap: anywhere; }
+.mail-card .meta { font-size: 12px; color: var(--ink-3); overflow-wrap: anywhere; }
+.mail-card .snip { font-size: 12.5px; color: var(--ink-2); overflow-wrap: anywhere; }
+
+/* Soundness matrix */
+.tests th.t { text-align: center; white-space: normal; min-width: 92px; line-height: 1.25; }
+.tcell { display: flex; justify-content: center; }
+.tchip { border: 1px solid var(--line-2); background: var(--surface); border-radius: 6px; font-size: 11.5px; font-weight: 600; padding: 4px 8px; cursor: pointer; min-width: 76px; color: var(--ink-3); }
+.tchip.ok { background: var(--ok-soft); border-color: transparent; color: var(--ok); }
+.tchip.concern { background: var(--warn-soft); border-color: transparent; color: var(--warn); }
+.tchip.unsound { background: var(--bad-soft); border-color: transparent; color: var(--bad); }
+
+/* Notes */
+.note-item { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; text-align: left; background: none; width: 100%; }
+.note-item:hover { background: var(--surface-2); }
+.note-item.on { background: var(--surface); border-color: var(--line); box-shadow: var(--shadow); }
+.note-item .t { font-weight: 600; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.note-item .p { font-size: 12px; color: var(--ink-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.title-input { font-family: var(--f-display); font-size: 22px; font-weight: 500; border: 0; background: transparent; width: 100%; padding: 2px 0; }
+.title-input:focus { outline: none; }
+.editor { min-height: 360px; border: 0; padding: 0; background: transparent; font-size: 14.5px; line-height: 1.7; }
+.editor:focus { box-shadow: none; }
+
+/* Drawer + modal */
+.scrim { position: fixed; inset: 0; background: rgba(10,15,12,.38); z-index: 40; display: flex; justify-content: flex-end; }
+.drawer { width: min(760px, 100%); height: 100%; background: var(--surface); display: flex; flex-direction: column; box-shadow: -10px 0 40px rgba(0,0,0,.18); padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); padding-right: env(safe-area-inset-right, 0px); }
+.drawer-h { padding: 16px 20px; border-bottom: 1px solid var(--line); display: flex; gap: 12px; align-items: flex-start; }
+.drawer-b { padding: 18px 20px; overflow-y: auto; flex: 1; min-height: 0; }
+.drawer-f { padding: 12px 20px; border-top: 1px solid var(--line); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.pagetext { white-space: pre-wrap; font-size: 13.5px; line-height: 1.65; overflow-wrap: anywhere; }
+.modal-scrim { position: fixed; inset: 0; background: rgba(10,15,12,.38); z-index: 50; display: grid; place-items: center; padding: 16px; }
+.modal { background: var(--surface); border-radius: 12px; padding: 20px; width: min(440px, 100%); box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 14px; }
+.toast { position: fixed; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 9px 16px; border-radius: 8px; font-size: 13px; z-index: 60; max-width: calc(100% - 32px); box-shadow: var(--shadow); }
+.notice { border: 1px solid var(--line); background: var(--surface-2); border-radius: 9px; padding: 10px 14px; font-size: 13px; color: var(--ink-2); display: flex; gap: 10px; align-items: flex-start; }
+.notice.warn { background: var(--warn-soft); border-color: transparent; color: var(--ink); }
+.notice.bad { background: var(--bad-soft); border-color: transparent; color: var(--ink); }
+.empty { text-align: center; padding: 36px 16px; color: var(--ink-3); display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.empty h3 { color: var(--ink); font-size: 15px; }
+.welcome { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
+.welcome .w { border-top: 2px solid var(--accent); padding-top: 10px; }
+.welcome .w b { display: block; margin-bottom: 4px; }
+.pdf-frame { width: 100%; height: 70vh; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-2); }
+.kbd { font-family: var(--f-mono); font-size: 11px; border: 1px solid var(--line-2); border-radius: 4px; padding: 0 4px; }
+
+/* Landing (welcome screen) */
+.card { border-radius: 14px; } .stat { border-radius: 14px; }
+body.landing .rail { display: none; }
+body.landing .app { grid-template-columns: minmax(0,1fr); }
+body.landing .main { padding: 0; }
+body.landing .wrap { max-width: none; gap: 0; }
+.hero-band { background: radial-gradient(120% 160% at 15% 0%, #23664f 0%, #11392d 50%, #0a241d 100%); color: #fff; margin-top: calc(-1 * env(safe-area-inset-top, 0px)); padding-top: calc(env(safe-area-inset-top, 0px) + 40px); padding-bottom: 64px; }
+.land-in { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px), 4vw); padding-right: max(16px, env(safe-area-inset-right, 0px), 4vw); }
+.hero-top { display: flex; gap: 26px; align-items: center; flex-wrap: wrap; }
+.hero-top svg { flex: none; filter: drop-shadow(0 10px 24px rgba(0,0,0,.35)); }
+.hero-band h1 { font-family: var(--f-body); font-weight: 300; font-size: clamp(36px, 6vw, 58px); letter-spacing: -.02em; line-height: 1.02; margin: 0; color: #fff; }
+.greet { font-size: clamp(19px, 2.4vw, 25px); color: #c3ead9; margin: 8px 0 0; font-weight: 400; }
+.hero-meta { color: #8fbfad; font-size: 14px; margin-top: 8px; }
+.hero-meta button { background: none; border: 0; color: #e7c77f; text-decoration: underline; cursor: pointer; padding: 0; font-size: 14px; }
+.hero-ask { display: flex; gap: 8px; margin-top: 30px; max-width: 760px; }
+.hero-ask input { flex: 1; min-width: 0; height: 52px; border-radius: 26px; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.1); color: #fff; padding: 0 22px; font-size: 16px; }
+.hero-ask input::placeholder { color: #a9cfc0; }
+.hero-ask input:focus { outline: none; border-color: #e7c77f; background: rgba(255,255,255,.14); }
+.hero-ask button { height: 52px; border-radius: 26px; border: 0; background: #e7c77f; color: #10291f; font-weight: 700; padding: 0 24px; cursor: pointer; font-size: 15px; }
+.land-body { margin-top: -36px; display: flex; flex-direction: column; gap: 18px; padding-bottom: 64px; }
+.docket { display: flex; gap: 22px; align-items: center; background: var(--surface); border-radius: 18px; padding: 20px 22px; box-shadow: 0 12px 32px rgba(10,30,22,.14); border: 1px solid var(--line); }
+.docket .dial { flex: none; width: 92px; height: 92px; }
+.docket b.big { display: block; font-size: 24px; font-weight: 700; line-height: 1.15; letter-spacing: -.01em; }
+.dk-list { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+.dk { display: flex; gap: 10px; align-items: baseline; font-size: 14px; }
+.dk i { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); transform: translateY(-1px); }
+.dk.bad i { background: var(--bad); } .dk.warn i { background: var(--warn); }
+.tiles { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
+.tile { display: flex; gap: 14px; align-items: center; text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; cursor: pointer; min-width: 0; color: var(--ink); }
+.tile:hover { border-color: var(--accent); transform: translateY(-1px); }
+@media (prefers-reduced-motion: no-preference) { .tile { transition: transform .15s, border-color .15s; } }
+.tile .ti { flex: none; width: 44px; height: 44px; border-radius: 13px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; }
+.tile b { display: block; font-weight: 600; font-size: 15px; }
+.tile span { display: block; color: var(--ink-3); font-size: 13px; }
+.land-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; color: var(--ink-3); font-size: 13px; }
+@media (max-width: 900px) { .tiles { grid-template-columns: minmax(0,1fr); } .docket { flex-direction: column; align-items: flex-start; } .hero-ask { flex-direction: column; } .hero-ask button { width: 100%; } }
+@media (max-width: 1100px) { .stats { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+@media (max-width: 900px) {
+  .app { grid-template-columns: minmax(0,1fr); }
+  .rail { position: sticky; top: env(safe-area-inset-top, 0px); height: auto; z-index: 20; flex-direction: row; align-items: center; padding-block: 10px; padding-right: max(16px, env(safe-area-inset-right, 0px)); gap: 12px; border-right: 0; border-bottom: 1px solid var(--line); overflow: visible; }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--rail); }
+  .brand-sub, .brand-name, .conn, .nav-group { display: none; }
+  .stats .stat:last-child { grid-column: span 2; }
+  .brand-name { font-size: 16px; }
+  .nav { flex-direction: row; overflow-x: auto; min-width: 0; flex: 1; scrollbar-width: none; }
+  .nav a { padding: 6px 10px; } .nav .count { display: none; }
+  .grid2, .grid3, .split, .welcome { grid-template-columns: minmax(0,1fr); }
+  .stats { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .stepper { grid-template-columns: repeat(4, minmax(0,1fr)); row-gap: 10px; }
+}
+</style>
+
+<div class="app">
+  <aside class="rail">
+    <div class="brand">
+      <a class="brand-mark" href="#home" aria-label="Home" id="brand-mark"></a>
+      <div><div class="brand-name">An Inspector Calls</div><div class="brand-sub">Planning examinations</div></div>
+    </div>
+    <nav class="nav" id="nav"></nav>
+    <div class="conn" id="conn"></div>
+  </aside>
+  <main class="main"><div class="wrap" id="view"></div></main>
+</div>
+
+<script>
+"use strict";
+/* ---------- tiny DOM helpers ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+function h(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  if (attrs) for (const [k, v] of Object.entries(attrs)) {
+    if (v == null || v === false) continue;
+    if (k === 'class') e.className = v;
+    else if (k === 'style') e.style.cssText = v;
+    else if (k.startsWith('on') && typeof v === 'function') e.addEventListener(k.slice(2), v);
+    else if (k === 'value') e.value = v;
+    else if (k === 'checked' || k === 'disabled' || k === 'selected') e[k] = !!v;
+    else e.setAttribute(k, v === true ? '' : v);
+  }
+  addKids(e, kids);
+  return e;
+}
+function addKids(e, kids) { for (const c of kids.flat(Infinity)) { if (c == null || c === false) continue; e.append(c instanceof Node ? c : String(c)); } }
+const SVG = {
+  overview: '<path d="M3 13h8V3H3zM13 21h8V11h-8zM3 21h8v-6H3zM13 3v6h8V3z"/>',
+  library: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+  ask: '<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
+  email: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+  notes: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  soundness: '<path d="M12 3v18"/><path d="M5 7h14"/><path d="m5 7-3 7a4 4 0 0 0 6 0z"/><path d="m19 7-3 7a4 4 0 0 0 6 0z"/>',
+  miqs: '<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14"/><path d="M12 17h.01"/>',
+  actions: '<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+  mods: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15h6"/><path d="M12 12v6"/>',
+  deadlines: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+  reports: '<path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+  upload: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/>',
+  close: '<path d="M18 6 6 18M6 6l12 12"/>',
+  home: '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/>',
+  spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/>'
+};
+function icon(name, size = 16) { const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); s.setAttribute('width', size); s.setAttribute('height', size); s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('fill', 'none'); s.setAttribute('stroke', 'currentColor'); s.setAttribute('stroke-width', '1.8'); s.setAttribute('stroke-linecap', 'round'); s.setAttribute('stroke-linejoin', 'round'); s.innerHTML = SVG[name] || ''; return s; }
+const rid = (p = '') => p + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const natural = (a, b) => String(a || '').localeCompare(String(b || ''), undefined, { numeric: true, sensitivity: 'base' });
+const todayISO = () => new Date().toISOString().slice(0, 10);
+const fmtDate = (iso, opts = { day: 'numeric', month: 'short', year: 'numeric' }) => { if (!iso) return ''; const d = new Date(iso.length === 10 ? iso + 'T12:00:00' : iso); return isNaN(d) ? String(iso) : d.toLocaleDateString('en-GB', opts); };
+const daysUntil = iso => { if (!iso) return null; const d = new Date(iso + 'T12:00:00'); const t = new Date(todayISO() + 'T12:00:00'); return Math.round((d - t) / 86400000); };
+const plural = (n, w, pl) => `${n} ${n === 1 ? w : (pl || w + 's')}`;
+const clip = (s, n) => { s = String(s || ''); return s.length > n ? s.slice(0, n - 1) + '…' : s; };
+const fmtBytes = b => b > 1e6 ? (b / 1e6).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1e3)) + ' KB';
+function toast(msg) { const t = h('div', { class: 'toast', role: 'status' }, msg); document.body.append(t); setTimeout(() => t.remove(), 3200); }
+function confirmBox(title, body, okLabel = 'Delete') {
+  return new Promise(res => {
+    const close = v => { m.remove(); res(v); };
+    const m = h('div', { class: 'modal-scrim', onclick: e => { if (e.target === m) close(false); } },
+      h('div', { class: 'modal', role: 'dialog', 'aria-modal': 'true' }, h('h2', {}, title), h('div', { class: 'muted' }, body),
+        h('div', { class: 'row', style: 'justify-content:flex-end' }, h('button', { class: 'btn ghost', onclick: () => close(false) }, 'Cancel'), h('button', { class: 'btn primary', onclick: () => close(true) }, okLabel))));
+    document.body.append(m); m.querySelector('.btn.primary').focus();
+  });
+}
+let drawerEl = null;
+function openDrawer(headNodes, bodyNode, footNodes) {
+  closeDrawer();
+  drawerEl = h('div', { class: 'scrim', onclick: e => { if (e.target === drawerEl) closeDrawer(); } },
+    h('div', { class: 'drawer', role: 'dialog', 'aria-modal': 'true' },
+      h('div', { class: 'drawer-h' }, h('div', { style: 'flex:1;min-width:0' }, headNodes), h('button', { class: 'btn ghost sm', 'aria-label': 'Close', onclick: closeDrawer }, icon('close'))),
+      h('div', { class: 'drawer-b' }, bodyNode), footNodes ? h('div', { class: 'drawer-f' }, footNodes) : null));
+  document.body.append(drawerEl);
+  return drawerEl;
+}
+function closeDrawer() { if (drawerEl) { drawerEl.remove(); drawerEl = null; } }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
+async function copyText(t) { try { await navigator.clipboard.writeText(t); toast('Copied'); } catch { toast('Copy is blocked here. Select the text and copy it instead.'); } }
+
+/* ---------- capabilities ---------- */
+const use = n => (window.claude && typeof window.claude.use === 'function') ? window.claude.use(n).catch(() => null) : Promise.resolve(null);
+const CAP = { db: undefined, user: undefined, sample: undefined, mcp: undefined, assets: undefined, downloads: undefined, tools: false };
+const S = { items: new Map(), mode: 'pending', uid: null, view: 'home', queue: [], ask: { entries: [], mode: 'find', scope: 'all', draft: '' }, mail: { entries: [], mode: 'ask', direct: null, draft: '' }, noteSel: null, noteFilter: 'all', noteAI: {}, report: null, lastMailErr: null };
+
+/* ---------- storage: private per-viewer db, local fallback ---------- */
+let col = null; const chains = new Map();
+const Store = {
+  async init() {
+    const t = setTimeout(() => { if (S.mode === 'pending') { S.mode = 'local'; loadLocal(); render(); } }, 11000);
+    const [db, user] = await Promise.all([use('db'), use('user')]);
+    CAP.db = db; CAP.user = user;
+    let uid = null; try { uid = user ? await user.id() : null; } catch {}
+    clearTimeout(t);
+    if (db && uid) {
+      S.uid = uid; col = db.collection('data/users/' + uid);
+      const loadT = setTimeout(() => { if (S.mode === 'db-wait') toast('Still connecting to your saved workspace…'); }, 10000);
+      S.mode = 'db-wait'; renderConn();
+      col.onSnapshot(snap => {
+        clearTimeout(loadT);
+        const m = new Map(); for (const d of snap.docs) m.set(d.id, { ...d.data(), id: d.id });
+        S.items = m; S.mode = 'db'; scheduleRender();
+      }, err => { clearTimeout(loadT); S.mode = 'local'; loadLocal(); toast('Saved workspace unavailable (' + err.code + '). Working on this device only.'); render(); });
+    } else { if (S.mode === 'pending') { S.mode = 'local'; loadLocal(); } render(); }
+  },
+  put(id, data) {
+    const rec = { ...data }; delete rec.id;
+    S.items.set(id, { ...rec, id });
+    if (S.mode !== 'db') { saveLocal(); return Promise.resolve(); }
+    const p = (chains.get(id) || Promise.resolve()).then(() => col.doc(id).set(rec)).catch(e => toast(e && e.code === 'quota_exceeded' ? 'Storage is full. Delete some items and try again.' : 'Could not save (' + (e && e.code || 'error') + ').'));
+    chains.set(id, p); return p;
+  },
+  del(id) {
+    S.items.delete(id);
+    if (S.mode !== 'db') { saveLocal(); return Promise.resolve(); }
+    const p = (chains.get(id) || Promise.resolve()).then(() => col.doc(id).delete()).catch(() => toast('Could not delete that item.'));
+    chains.set(id, p); return p;
+  }
+};
+function loadLocal() { try { const raw = localStorage.getItem('exdesk-items'); if (raw) S.items = new Map(JSON.parse(raw).map(r => [r.id, r])); } catch {} }
+function saveLocal() { try { localStorage.setItem('exdesk-items', JSON.stringify([...S.items.values()])); } catch {} }
+const all = kind => [...S.items.values()].filter(r => r.kind === kind);
+const WS_DEFAULT = { kind: 'ws', type: 'lp', plan: '', lpa: '', caseRef: '', inspector: '', po: '', stage: 0, submitted: '' };
+const ws = () => ({ ...WS_DEFAULT, ...(S.items.get('workspace') || {}) });
+const putWs = patch => Store.put('workspace', { ...ws(), ...patch });
+
+/* ---------- local text cache (IndexedDB) ---------- */
+const IDB = {
+  p: null,
+  open() { return this.p ||= new Promise((res, rej) => { try { const r = indexedDB.open('exdesk', 1); r.onupgradeneeded = () => r.result.createObjectStore('t'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); } catch (e) { rej(e); } }); },
+  async get(k) { try { const d = await this.open(); return await new Promise(res => { const q = d.transaction('t').objectStore('t').get(k); q.onsuccess = () => res(q.result); q.onerror = () => res(undefined); }); } catch { return undefined; } },
+  async put(k, v) { try { const d = await this.open(); await new Promise(res => { const tx = d.transaction('t', 'readwrite'); tx.objectStore('t').put(v, k); tx.oncomplete = res; tx.onerror = res; }); } catch {} },
+  async del(k) { try { const d = await this.open(); await new Promise(res => { const tx = d.transaction('t', 'readwrite'); tx.objectStore('t').delete(k); tx.oncomplete = res; tx.onerror = res; }); } catch {} }
+};
+const TEXT = new Map();
+async function getText(rec) {
+  if (TEXT.has(rec.id)) return TEXT.get(rec.id);
+  let pages = await IDB.get(rec.id);
+  if (!pages && rec.textAsset) {
+    try { const r = await fetch('/_blob/' + rec.textAsset); if (r.ok) { const j = await r.json(); pages = j.pages; IDB.put(rec.id, pages); } } catch {}
+  }
+  pages = Array.isArray(pages) ? pages : [];
+  TEXT.set(rec.id, pages); return pages;
+}
+async function loadAllTexts(onProgress) {
+  const docs = all('doc').filter(d => !TEXT.has(d.id)); let done = 0;
+  const workers = Array.from({ length: 4 }, async () => { while (docs.length) { const d = docs.shift(); await getText(d); done++; onProgress && onProgress(done); } });
+  await Promise.all(workers);
+}
+
+/* ---------- text extraction ---------- */
+const LIBS = {
+  pdf: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
+  pdfw: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js',
+  mammoth: 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js',
+  xlsx: 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
+  jspdf: 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+  autotable: 'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js'
+};
+const loaded = {};
+function loadScript(src) { return loaded[src] ||= new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = () => { delete loaded[src]; rej(new Error('Could not load a reader component. Check your connection and try again.')); }; document.head.append(s); }); }
+function splitSections(text, size = 3200) {
+  const out = []; let buf = '';
+  for (const para of String(text).replace(/\r/g, '').split(/\n{2,}/)) {
+    if (buf.length + para.length > size && buf) { out.push(buf.trim()); buf = ''; }
+    if (para.length > size) { for (let i = 0; i < para.length; i += size) out.push(para.slice(i, i + size)); continue; }
+    buf += para + '\n\n';
+  }
+  if (buf.trim()) out.push(buf.trim());
+  return out.length ? out : [''];
+}
+async function extract(file, onPct) {
+  const name = file.name.toLowerCase(); const ext = name.split('.').pop();
+  if (ext === 'pdf' || file.type === 'application/pdf') {
+    await loadScript(LIBS.pdf); await loadScript(LIBS.pdfw);
+    const lib = window.pdfjsLib; lib.GlobalWorkerOptions.workerSrc = LIBS.pdfw;
+    const pdf = await lib.getDocument({ data: new Uint8Array(await file.arrayBuffer()), isEvalSupported: false }).promise;
+    const pages = [];
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const p = await pdf.getPage(i); const tc = await p.getTextContent();
+      let s = ''; for (const it of tc.items) { s += it.str; s += it.hasEOL ? '\n' : (it.str && !/\s$/.test(it.str) ? ' ' : ''); }
+      pages.push(s.replace(/[ \t]+\n/g, '\n').replace(/ {2,}/g, ' ').trim()); onPct && onPct(i / pdf.numPages);
+      p.cleanup && p.cleanup();
+    }
+    pdf.destroy && pdf.destroy();
+    return { pages, paged: true };
+  }
+  if (ext === 'docx') { await loadScript(LIBS.mammoth); const r = await window.mammoth.extractRawText({ arrayBuffer: await file.arrayBuffer() }); return { pages: splitSections(r.value), paged: false }; }
+  if (['xlsx', 'xls', 'ods'].includes(ext)) { await loadScript(LIBS.xlsx); const wb = window.XLSX.read(await file.arrayBuffer()); return { pages: wb.SheetNames.map(n => 'Sheet: ' + n + '\n' + window.XLSX.utils.sheet_to_csv(wb.Sheets[n]).slice(0, 60000)), paged: false }; }
+  if (['html', 'htm'].includes(ext)) { const d = new DOMParser().parseFromString(await file.text(), 'text/html'); return { pages: splitSections(d.body ? d.body.innerText || d.body.textContent : ''), paged: false }; }
+  if (['txt', 'md', 'csv', 'eml', 'json', 'rtf', 'xml', 'tsv'].includes(ext) || (file.type || '').startsWith('text/')) return { pages: splitSections(await file.text()), paged: false };
+  return { pages: [], paged: false, unsupported: true };
+}
+const CATS = ['Submission document', 'Evidence base', 'Representation', 'Hearing statement', 'Council response', 'Correspondence', 'National policy & law', 'Other'];
+function guessCat(n) {
+  n = n.toLowerCase();
+  if (/hearing statement|matter\s?\d|^m\d+[ _-]/.test(n)) return 'Hearing statement';
+  if (/\brep(s|resentation)?\b|objection|respons(e|es) to|comments/.test(n)) return 'Representation';
+  if (/council('s)? response|ex\d|examination response|answers? to/.test(n)) return 'Council response';
+  if (/nppf|ppg|regulation|act 20|planning practice|written ministerial/.test(n)) return 'National policy & law';
+  if (/sustainability appraisal|\bsa\b|hra|habitats|shlaa|helaa|shma|lhna|housing need|viability|infrastructure|idp|flood|sfra|transport|evidence|study|assessment|topic paper/.test(n)) return 'Evidence base';
+  if (/submission|local[ _-]?plan|policies map|socg|common ground|duty to co-?operate|consultation statement|reg(ulation)? ?(18|19|22)/.test(n)) return 'Submission document';
+  if (/letter|email|\.eml$|correspondence|note to/.test(n)) return 'Correspondence';
+  return 'Other';
+}
+function nextCode() { let n = 0; for (const d of all('doc')) { const k = parseInt(String(d.code || '').slice(1)); if (k > n) n = k; } for (const q of S.queue) { const k = parseInt(String(q.code || '').slice(1)); if (k > n) n = k; } return 'D' + (n + 1); }
+
+let ingesting = false;
+function enqueue(files) {
+  for (const f of files) S.queue.push({ qid: rid('q'), file: f, name: f.name, size: f.size, status: 'Waiting', pct: 0 });
+  render(); if (!ingesting) runQueue();
+}
+async function runQueue() {
+  ingesting = true;
+  while (true) {
+    const q = S.queue.find(x => x.status === 'Waiting'); if (!q) break;
+    try {
+      q.code = nextCode(); q.status = 'Reading'; paintQueue();
+      const ex = await extract(q.file, p => { q.pct = p; paintQueue(); });
+      const chars = ex.pages.reduce((a, p) => a + p.length, 0);
+      const id = rid('doc_');
+      const rec = { kind: 'doc', code: q.code, ref: '', name: q.name, category: guessCat(q.name), size: q.size, type: q.file.type || '', pages: ex.pages.length, chars, paged: ex.paged, addedAt: Date.now(), noText: chars < 40 };
+      TEXT.set(id, ex.pages); await IDB.put(id, ex.pages);
+      if (CAP.assets) {
+        q.status = 'Saving'; paintQueue();
+        try { const up = await CAP.assets.upload(new Blob([JSON.stringify({ pages: ex.pages })], { type: 'application/json' })); rec.textAsset = up.id; } catch (e) { rec.textAssetErr = e && e.code || 'error'; }
+        if (q.size < 19.5e6) { try { const up2 = await CAP.assets.upload(q.file); rec.fileAsset = up2.id; rec.fileType = up2.contentType; } catch {} }
+      }
+      await Store.put(id, rec);
+      q.status = ex.unsupported ? 'Stored (no readable text)' : rec.noText ? 'Stored (no text layer, probably a scan)' : 'Indexed'; q.pct = 1; q.done = true;
+      invalidateIndex();
+    } catch (e) { q.status = 'Failed: ' + (e && e.message || 'could not read file'); q.done = true; q.failed = true; }
+    paintQueue();
+  }
+  ingesting = false; scheduleRender();
+}
+function paintQueue() { const el = document.getElementById('queue'); if (el) el.replaceWith(queueView()); }
+
+/* ---------- search index (BM25 over page passages) ---------- */
+const STOP = new Set('a an the and or of to in on for by with at from as is are was were be been being this that these those it its into than then there their which who whom what when where how not no but if so such any all also may can will shall should would could has have had do does did per via within upon our we you they he she them his her'.split(' '));
+const stem = w => w.length > 5 ? w.replace(/(ing|ings|ed|es|s)$/, '') : w.length > 3 ? w.replace(/s$/, '') : w;
+const tokens = s => String(s).toLowerCase().replace(/[^a-z0-9£%.\-]+/g, ' ').replace(/(?<![0-9])[.\-]|[.\-](?![0-9])/g, ' ').split(/\s+/).filter(w => w.length > 1 && !STOP.has(w)).map(stem);
+let INDEX = null;
+function invalidateIndex() { INDEX = null; }
+function buildIndex() {
+  const docs = all('doc'); const sig = docs.map(d => d.id).sort().join('|') + ':' + docs.filter(d => TEXT.has(d.id)).length;
+  if (INDEX && INDEX.sig === sig) return INDEX;
+  const chunks = []; const df = new Map();
+  for (const d of docs) {
+    const pages = TEXT.get(d.id) || [];
+    pages.forEach((text, pi) => {
+      const step = 1100;
+      for (let i = 0; i < Math.max(1, text.length); i += step) {
+        const t = text.slice(Math.max(0, i - 150), i + step);
+        if (!t.trim()) continue;
+        const tf = new Map(); const tk = tokens(t); for (const w of tk) tf.set(w, (tf.get(w) || 0) + 1);
+        for (const w of tf.keys()) df.set(w, (df.get(w) || 0) + 1);
+        chunks.push({ doc: d, page: pi + 1, text: t, tf, len: tk.length });
+      }
+    });
+  }
+  const avg = chunks.reduce((a, c) => a + c.len, 0) / Math.max(1, chunks.length);
+  return INDEX = { sig, chunks, df, avg, N: chunks.length };
+}
+function searchIndex(query, { limit = 10, codes = null, cats = null } = {}) {
+  const ix = buildIndex(); const qt = [...new Set(tokens(query))]; if (!qt.length) return [];
+  const phrase = query.toLowerCase().replace(/["“”]/g, '').trim();
+  const scored = [];
+  for (const c of ix.chunks) {
+    if (codes && !codes.includes(c.doc.code)) continue;
+    if (cats && !cats.includes(c.doc.category)) continue;
+    let s = 0, hit = 0;
+    for (const w of qt) { const f = c.tf.get(w); if (!f) continue; hit++; const idf = Math.log(1 + (ix.N - ix.df.get(w) + .5) / (ix.df.get(w) + .5)); s += idf * (f * 2.4) / (f + 1.4 * (1 - .75 + .75 * c.len / ix.avg)); }
+    if (!s) continue;
+    s *= (0.5 + hit / qt.length);
+    if (phrase.length > 6 && c.text.toLowerCase().includes(phrase)) s *= 1.8;
+    scored.push({ c, s });
+  }
+  scored.sort((a, b) => b.s - a.s);
+  const out = []; const seen = new Set();
+  for (const { c, s } of scored) { const k = c.doc.id + ':' + c.page; if (seen.has(k)) continue; seen.add(k); out.push({ doc: c.doc, page: c.page, text: c.text, score: s }); if (out.length >= limit) break; }
+  return out;
+}
+function excerpt(text, query, n = 520) {
+  const qt = tokens(query); const low = text.toLowerCase(); let at = -1;
+  for (const w of qt) { const i = low.indexOf(w); if (i >= 0 && (at < 0 || i < at)) at = i; }
+  const start = Math.max(0, at - Math.floor(n / 3)); let s = text.slice(start, start + n).replace(/\s+/g, ' ').trim();
+  return (start > 0 ? '…' : '') + s + (start + n < text.length ? '…' : '');
+}
+function highlight(text, query) {
+  const ws = [...new Set(String(query).toLowerCase().replace(/[^a-z0-9£% ]+/g, ' ').split(/\s+/).filter(w => w.length > 2 && !STOP.has(w)).map(stem))];
+  if (!ws.length) return [text];
+  const re = new RegExp('(' + ws.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '[a-z]*').join('|') + ')', 'gi');
+  const out = []; let last = 0, m;
+  while ((m = re.exec(text))) { if (m.index > last) out.push(text.slice(last, m.index)); out.push(h('mark', {}, m[0])); last = re.lastIndex; if (m[0] === '') re.lastIndex++; }
+  if (last < text.length) out.push(text.slice(last));
+  return out;
+}
+const docByCode = code => all('doc').find(d => String(d.code).toLowerCase() === String(code).toLowerCase());
+const docLabel = d => d.ref ? d.ref : d.code;
+const unit = d => d && d.paged === false ? 's.' : 'p.';
+
+/* ---------- markdown (safe, DOM-built) ---------- */
+function renderMd(src) {
+  const root = h('div', { class: 'md' }); const lines = String(src || '').replace(/\r/g, '').split('\n'); let i = 0;
+  const isList = l => /^\s*([-*•]|\d+[.)])\s+/.test(l);
+  while (i < lines.length) {
+    const l = lines[i]; let m;
+    if (!l.trim()) { i++; continue; }
+    if ((m = l.match(/^(#{1,4})\s+(.*)/))) { root.append(h('h' + Math.min(6, m[1].length + 2), {}, inline(m[2]))); i++; continue; }
+    if (/^\s*\|/.test(l)) { const rows = []; while (i < lines.length && /^\s*\|/.test(lines[i])) rows.push(lines[i++]); root.append(mdTable(rows)); continue; }
+    if (isList(l)) { const ordered = /^\s*\d/.test(l); const list = h(ordered ? 'ol' : 'ul'); while (i < lines.length && isList(lines[i])) list.append(h('li', {}, inline(lines[i++].replace(/^\s*([-*•]|\d+[.)])\s+/, '')))); root.append(list); continue; }
+    if (/^>\s?/.test(l)) { const q = []; while (i < lines.length && /^>\s?/.test(lines[i])) q.push(lines[i++].replace(/^>\s?/, '')); root.append(h('blockquote', {}, inline(q.join(' ')))); continue; }
+    if (/^-{3,}\s*$/.test(l)) { root.append(h('hr', { style: 'border:0;border-top:1px solid var(--line);margin:14px 0' })); i++; continue; }
+    const p = []; while (i < lines.length && lines[i].trim() && !/^(#{1,4}\s|\s*\||>)/.test(lines[i]) && !isList(lines[i])) p.push(lines[i++]);
+    root.append(h('p', {}, inline(p.join(' '))));
+  }
+  return root;
+}
+function mdTable(rows) {
+  const cells = r => r.trim().replace(/^\||\|$/g, '').split('|').map(c => c.trim());
+  const body = rows.filter(r => !/^\s*\|?\s*:?-{2,}/.test(r)); if (!body.length) return h('div');
+  const [head, ...rest] = body;
+  return h('div', { class: 'tbl-wrap' }, h('table', {}, h('thead', {}, h('tr', {}, cells(head).map(c => h('th', {}, inline(c))))), h('tbody', {}, rest.map(r => h('tr', {}, cells(r).map(c => h('td', {}, inline(c))))))));
+}
+function inline(s) {
+  const out = []; const re = /(\[\[[^\]]+\]\]|\*\*[^*]+\*\*|`[^`]+`|(?<![\w*])\*[^*\s][^*]*\*(?!\w))/g; let last = 0, m;
+  while ((m = re.exec(s))) {
+    if (m.index > last) out.push(s.slice(last, m.index));
+    const t = m[0];
+    if (t.startsWith('[[')) out.push(...cites(t.slice(2, -2)));
+    else if (t.startsWith('**')) out.push(h('strong', {}, t.slice(2, -2)));
+    else if (t.startsWith('`')) out.push(h('code', {}, t.slice(1, -1)));
+    else out.push(h('em', {}, t.slice(1, -1)));
+    last = re.lastIndex;
+  }
+  if (last < s.length) out.push(s.slice(last));
+  return out;
+}
+function parseCite(part) {
+  part = part.trim(); let m;
+  if ((m = part.match(/^E:\s*([A-Za-z0-9_-]+)/))) return { mail: m[1] };
+  if ((m = part.match(/^(D\d+)\b[\s,]*(?:(?:pp?|s|ss)\.?\s*(\d+)(?:\s*[-–]\s*(\d+))?)?/i))) return { code: m[1].toUpperCase(), from: m[2] ? +m[2] : null, to: m[3] ? +m[3] : null };
+  return null;
+}
+function cites(body) {
+  const out = [];
+  for (const part of body.split(/\s*;\s*/)) {
+    const c = parseCite(part);
+    if (c && c.mail) { const t = S.mailSeen && S.mailSeen.get(c.mail); out.push(h('button', { class: 'cite mail', title: t ? t.subject : 'Email thread', onclick: () => openThread(c.mail) }, '✉ ' + clip(t ? t.subject || 'email' : 'email', 28))); continue; }
+    if (c) { const d = docByCode(c.code); out.push(h('button', { class: 'cite', title: d ? d.name : 'Document ' + c.code, onclick: () => d ? openDoc(d, c.from || 1) : toast('That document is no longer in the library.') }, (d ? docLabel(d) : c.code) + (c.from ? ' ' + unit(d) + c.from + (c.to ? '–' + c.to : '') : ''))); continue; }
+    out.push('[' + part + ']');
+  }
+  return out;
+}
+const plainCites = s => String(s || '').replace(/\[\[([^\]]+)\]\]/g, (_, b) => '(' + b.split(/\s*;\s*/).map(p => { const c = parseCite(p); if (!c) return p; if (c.mail) { const t = S.mailSeen && S.mailSeen.get(c.mail); return 'email: ' + (t ? t.subject : 'thread'); } const d = docByCode(c.code); return (d ? docLabel(d) : c.code) + (c.from ? ', ' + unit(d) + ' ' + c.from + (c.to ? '-' + c.to : '') : ''); }).join('; ') + ')');
+
+/* ---------- Claude helpers ---------- */
+const SAMPLE_COPY = {
+  not_granted: 'Claude is turned off for this page. Allow it from the page\'s Permissions menu to use this.',
+  sampling_disabled: 'Claude is not available on this account.',
+  rate_limited: 'Claude is busy or your usage limit has been reached. Wait a little and try again.',
+  session_expired: 'Your session has expired. Sign in to Claude again and reload the page.',
+  refused: 'Claude declined this request. Try rewording it.',
+  empty_completion: 'Claude returned an empty answer. Try a narrower question.',
+  prompt_too_large: 'That is too much material for one request. Narrow the question or scope.',
+  invalid_json: 'Claude\'s answer was not in the expected format. Try again.',
+  tools_unavailable: 'This view cannot let Claude search the library directly.',
+  upstream_error: 'The connection to Claude dropped. Try again.'
+};
+const sampleMsg = e => SAMPLE_COPY[e && e.code] || ('Something went wrong (' + (e && e.code || 'error') + '). Try again.');
+async function ensureSample() {
+  if (CAP.sample === undefined) CAP.sample = await use('sample');
+  if (CAP.sample && CAP.tools === false) { try { const l = await CAP.sample.limits(); CAP.tools = !!l.tools; } catch { CAP.tools = null; } }
+  return CAP.sample;
+}
+function catalogue(cats) {
+  const docs = all('doc').filter(d => !cats || cats.includes(d.category)).sort((a, b) => natural(a.code, b.code));
+  if (!docs.length) return '(The library is empty.)';
+  return docs.slice(0, 450).map(d => `${d.code} | ${d.ref || '-'} | ${d.name} | ${d.category} | ${d.pages} ${d.paged === false ? 'sections' : 'pages'}${d.noText ? ' | NO TEXT (scan)' : ''}`).join('\n') + (docs.length > 450 ? `\n…and ${docs.length - 450} more (use search_documents)` : '');
+}
+function wsContext() { const w = ws(); return `Examination: ${w.plan || (w.type === 'nsip' ? 'an NSIP application' : 'a local plan')}${w.lpa ? ' (' + (w.type === 'nsip' ? 'applicant: ' : '') + w.lpa + ')' : ''}. Type: ${w.type === 'nsip' ? 'NSIP (development consent order) examination' : 'local plan examination'}. Stage: ${stagesFor(w)[w.stage] || 'unknown'}. Today is ${fmtDate(todayISO(), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}.`; }
+function libTools(log, cats) {
+  return [
+    { name: 'search_documents', description: 'Keyword search across the examination library. Returns the best-matching passages with document code, page and an excerpt. Run several searches with different wording and synonyms, because planning documents use varied terms.', inputSchema: { type: 'object', properties: { query: { type: 'string', description: 'keywords' }, limit: { type: 'integer', description: '1-15, default 8' }, documents: { type: 'array', items: { type: 'string' }, description: 'optional document codes (e.g. ["D3","D7"]) to restrict the search' } }, required: ['query'] },
+      execute: async (inp) => { const q = String(inp.query || ''); const lim = Math.min(15, Math.max(1, Number(inp.limit) || 8)); const codes = Array.isArray(inp.documents) && inp.documents.length ? inp.documents.map(String) : null; const r = searchIndex(q, { limit: lim, codes, cats }); log(`Searched “${clip(q, 40)}” · ${r.length}`); return { results: r.map(x => ({ doc: x.doc.code, title: x.doc.name, page: x.page, excerpt: excerpt(x.text, q, 700) })) }; } },
+    { name: 'read_pages', description: 'Read the full text of pages from one document (at most 5 pages per call). Use it to check context before relying on a passage.', inputSchema: { type: 'object', properties: { document: { type: 'string', description: 'document code, e.g. D3' }, from: { type: 'integer' }, to: { type: 'integer' } }, required: ['document', 'from'] },
+      execute: async (inp) => { const d = docByCode(String(inp.document || '')); if (!d) throw new Error('No document with code ' + inp.document); const pages = await getText(d); const from = Math.max(1, Number(inp.from) || 1); const to = Math.min(pages.length, Math.max(from, Number(inp.to) || from), from + 4); log(`Read ${d.code} ${unit(d)}${from}${to > from ? '–' + to : ''}`); const out = []; for (let p = from; p <= to; p++) out.push({ page: p, text: (pages[p - 1] || '').slice(0, 4800) }); return { doc: d.code, title: d.name, pages: out }; } },
+  ];
+}
+const LIB_RULES = mode => `${EXPERT()}
+
+You are the research assistant inside this examination workspace. ${wsContext()}
+
+Ground every statement in the library documents. Cite inline as [[D3 p.12]] (document code, then page; [[D3 pp.12-14]] for a range; several: [[D3 p.12; D7 p.4]]). Only cite pages you have actually seen in tool results or excerpts. If the library does not answer the question, say so plainly and list what you searched for.
+Write in measured, impartial UK English, as an inspector's working note reads. Use short headings and bullets where they help. Do not reach conclusions on soundness or legal compliance that the evidence does not support: flag gaps and suggest questions for the Council instead.
+${mode === 'analyse' ? 'MODE: ANALYSE. Search widely (at least 6 searches with varied terms, synonyms and the names of key evidence documents), read the key pages in full and check their context, then give: a short answer first; the relevant legal and policy tests; the evidence for and against with citations, including what other parties say; inconsistencies, gaps and weaknesses in method; your reasoned assessment; and, where useful, questions for the Council or applicant and possible main modifications or DCO requirements.' : 'MODE: FIND. Locate the relevant passages. Run several searches with different terms and synonyms. List each finding with a short quotation and its citation, grouped by document. Keep commentary brief.'}`;
+
+/* ---------- Gmail via connector ---------- */
+const MCP_COPY = {
+  server_not_connected: 'Gmail is not connected to your Claude account. Add it in claude.ai under Settings → Connectors, then search again.',
+  needs_reauth: 'Your Gmail connection has expired. Reconnect Gmail in claude.ai under Settings → Connectors.',
+  not_in_manifest: 'Mailbox access is turned off for this page. Turn it on from the page\'s Permissions menu.',
+  approval_required: 'Mailbox access needs your approval. Run the search again and choose Allow.',
+  selection_required: 'You have more than one Gmail connection. Choose one when Claude asks, then search again.',
+  blocked_by_policy: 'Your organisation blocks Gmail access from pages like this one.',
+  server_unavailable: 'Gmail did not respond. Try again in a moment.',
+  tool_error: 'Gmail reported an error with that search. Try simpler search terms.'
+};
+const mcpMsg = e => MCP_COPY[e && e.code] || 'Mailbox search failed (' + (e && e.code || 'error') + ').';
+const str = v => typeof v === 'string' ? v : v && typeof v === 'object' ? (v.displayName || v.name || v.emailAddress || v.email || v.address || '') + ((v.displayName || v.name) && (v.emailAddress || v.email) ? ' <' + (v.emailAddress || v.email) + '>' : '') : v == null ? '' : String(v);
+const strList = v => Array.isArray(v) ? v.map(str).filter(Boolean).join(', ') : str(v);
+S.mailSeen = new Map();
+function rememberThreads(payload) {
+  const threads = (payload && (payload.threads || payload.thread || [])) || [];
+  const out = [];
+  for (const t of threads) {
+    const msgs = t.messages || []; const first = msgs[0] || {}; const lastM = msgs[msgs.length - 1] || first;
+    const senderAddr = str(first.sender || first.from); const dn = (first.addressDisplayNames || []).find(a => a && a.emailAddress === senderAddr && a.displayName);
+    const rec = { id: t.id, subject: str(first.subject || t.subject) || '(no subject)', from: dn ? dn.displayName + ' <' + senderAddr + '>' : senderAddr, date: str(lastM.date || first.date), snippet: str(lastM.snippet || first.snippet || t.snippet), count: t.messageCount || msgs.length || null, url: str(t.viewUrl || first.viewUrl) };
+    if (rec.id) { S.mailSeen.set(rec.id, { ...(S.mailSeen.get(rec.id) || {}), ...rec }); out.push(rec); }
+  }
+  return out;
+}
+async function gmailSearch(query, n = 15, signal) {
+  if (CAP.mcp === undefined) CAP.mcp = await use('mcp');
+  if (!CAP.mcp) throw { code: 'capability_disabled' };
+  const r = await CAP.mcp.callTool('Gmail', 'search_threads', { query, pageSize: Math.min(25, n), view: 'THREAD_VIEW_MINIMAL' }, signal ? { signal } : undefined);
+  return rememberThreads(r.payload);
+}
+async function gmailThread(id, signal) {
+  if (CAP.mcp === undefined) CAP.mcp = await use('mcp');
+  if (!CAP.mcp) throw { code: 'capability_disabled' };
+  const r = await CAP.mcp.callTool('Gmail', 'get_thread', { threadId: id, messageFormat: 'PLAIN_TEXT' }, signal ? { signal } : undefined);
+  const p = r.payload || {}; const msgs = (p.messages || []).map(m => ({ from: str(m.sender || m.from), to: strList(m.toRecipients || m.to), date: str(m.date), subject: str(m.subject), body: str(m.plaintextBody || m.snippet), attachments: (m.attachments || []).map(a => str(a.filename || a.name || a)).filter(Boolean), url: str(m.viewUrl) }));
+  const first = msgs[0] || {};
+  S.mailSeen.set(id, { ...(S.mailSeen.get(id) || {}), id, subject: first.subject || (S.mailSeen.get(id) || {}).subject || '(no subject)', url: str(p.viewUrl) || (S.mailSeen.get(id) || {}).url, from: first.from });
+  return { id, url: str(p.viewUrl), messages: msgs };
+}
+function mailTools(log) {
+  return [
+    { name: 'gmail_search', description: 'Search the inspector\'s Gmail with Gmail query syntax (from:, to:, subject:, after:YYYY/MM/DD, before:, has:attachment, filename:, OR, quotes). Returns matching threads with id, subject, sender, date and snippet.', inputSchema: { type: 'object', properties: { query: { type: 'string' }, max: { type: 'integer', description: '1-25, default 15' } }, required: ['query'] },
+      execute: async (inp, ctx) => { try { const r = await gmailSearch(String(inp.query || ''), Number(inp.max) || 15, ctx.signal); log(`Mail search “${clip(inp.query, 40)}” · ${r.length}`); return { threads: r.map(t => ({ threadId: t.id, subject: t.subject, from: t.from, date: t.date, messages: t.count, snippet: clip(t.snippet, 240) })) }; } catch (e) { S.lastMailErr = e; throw new Error(mcpMsg(e)); } } },
+    { name: 'gmail_read_thread', description: 'Read every message in one email thread (sender, recipients, date, plain-text body, attachment names).', inputSchema: { type: 'object', properties: { threadId: { type: 'string' } }, required: ['threadId'] },
+      execute: async (inp, ctx) => { try { const t = await gmailThread(String(inp.threadId || ''), ctx.signal); log(`Opened “${clip((S.mailSeen.get(t.id) || {}).subject, 36)}”`); let budget = 26000; return { threadId: t.id, messages: t.messages.map(m => { const b = m.body.slice(0, Math.max(400, Math.min(6000, budget))); budget -= b.length; return { from: m.from, to: m.to, date: m.date, subject: m.subject, body: b, attachments: m.attachments }; }) }; } catch (e) { S.lastMailErr = e; throw new Error(mcpMsg(e)); } } }
+  ];
+}
+
+/* ---------- navigation ---------- */
+const VIEWS = [
+  ['group', 'Workspace'], ['home', 'Home'], ['overview', 'Overview'], ['library', 'Library'], ['ask', 'Ask the library'], ['email', 'Email search'], ['notes', 'Notes & findings'],
+  ['group', 'Examination'], ['soundness', 'Soundness tests'], ['miqs', 'Matters & questions'], ['actions', 'Hearing actions'], ['mods', 'Main modifications'], ['deadlines', 'Deadlines'],
+  ['group', 'Output'], ['reports', 'Reports & PDFs']
+];
+const STAGES = ['Submitted', 'Initial questions', 'MIQs issued', 'Hearings', 'Post-hearing', 'MM consultation', 'Report'];
+const NSIP_STAGES = ['Accepted', 'Pre-examination', 'Rule 6 issued', 'Preliminary meeting', 'Examination', 'Examination closed', 'Recommendation', 'Decision'];
+const stagesFor = w => (w && w.type === 'nsip') ? NSIP_STAGES : STAGES;
+const isNSIP = () => ws().type === 'nsip';
+/* Every Claude call uses the most capable model at the highest reasoning effort. */
+const AI = { model: 'claude-opus-5-5', modelTier: 'complex', effort: 'high' };
+const EXPERT_LP = `LEGAL AND POLICY FRAME (local plan examination). Work within the Planning and Compulsory Purchase Act 2004: s20(5) (whether the plan meets the requirements of s19 and s24(1) and the regulations, whether it is sound, and whether the duty to cooperate in s33A has been met), s20(7)-(7C) (recommendations and main modifications at the Council's request) and s19 (including s19(1A) climate change, s19(5) sustainability appraisal, the Local Development Scheme and the Statement of Community Involvement). Also the Town and Country Planning (Local Planning) (England) Regulations 2012 (notably regs 18, 19, 20 and 22), the Environmental Assessment of Plans and Programmes Regulations 2004 (SEA), the Conservation of Habitats and Species Regulations 2017 (HRA and appropriate assessment), and the public sector equality duty in s149 of the Equality Act 2010. Soundness means positively prepared, justified, effective and consistent with national policy, as set out in the NPPF. A failure of the duty to cooperate cannot be cured by main modifications. Identify from the documents which version of the NPPF and which transitional arrangements apply (and whether reforms under the Levelling-up and Regeneration Act 2023 affect the plan) rather than assuming.`;
+const EXPERT_NSIP = `LEGAL AND POLICY FRAME (nationally significant infrastructure project, development consent order). Work within the Planning Act 2008: s88 and the Infrastructure Planning (Examination Procedure) Rules 2010 (initial assessment of principal issues, the rule 6 letter and Preliminary Meeting, the rule 8 letter and timetable, written questions, issue-specific, open-floor and compulsory acquisition hearings, site inspections), s98 (six-month examination and the period for the recommendation report), s104 (deciding in accordance with any relevant National Policy Statement unless an exception in s104(4)-(8) applies, including where adverse impacts would outweigh benefits) or s105 where no NPS has effect, s120 (what a DCO may include), s122 and s123 (compulsory acquisition: legitimate purpose, a compelling case in the public interest, and the land-related conditions), s60 local impact reports, and the Infrastructure Planning (Environmental Impact Assessment) Regulations 2017. The Secretary of State is the competent authority under the Conservation of Habitats and Species Regulations 2017, so the Examining Authority must gather the information for any appropriate assessment (report on the implications for European sites). Identify the relevant NPS (for example EN-1 and the technology-specific energy NPSs, the National Networks NPS, the Airports NPS, the ports or water resources NPSs) and its designation date from the documents, and use statements of common ground and principal areas of disagreement to locate where parties really differ.`;
+const EXPERT = () => `You are working for a senior Planning Inspector (Level 3) at the top of the Planning Inspectorate, who examines the largest and most complex cases in England, such as local plans for major cities and nationally significant infrastructure projects. Work to the standard expected of the Inspectorate's most senior inspectors and of a King's Counsel advising them: rigorous, precise, impartial and robust to legal challenge (s113 of the 2004 Act or s118 of the 2008 Act).
+${isNSIP() ? EXPERT_NSIP : EXPERT_LP}
+STANDARDS OF REASONING. Separate what the documents say, what the evidence shows and what you infer. Test evidence: method, assumptions, data dates, sensitivity and whether it was consulted on. Where parties disagree, set out each position fairly before weighing it. Reach a reasoned view only as far as the evidence goes, and say what further evidence or question would resolve the rest. Give paragraph numbers of national policy, guidance or case law only when you are confident they are right and mark any you are unsure of with [check]; prefer citing the library. Never invent facts, figures, dates, document content or citations.
+STATE YOUR UNCERTAINTY. End every substantive answer with a short "Confidence and limits" section: your confidence (high, medium or low) and why, what you did not check, and what could change the conclusion.`;
+function counts() {
+  return { library: all('doc').length || '', notes: all('note').length || '', soundness: all('snd').length || '', miqs: all('miq').length || '', actions: all('act').filter(a => a.status !== 'Done').length || '', mods: all('mm').length || '', deadlines: all('dl').filter(d => daysUntil(d.date) >= 0).length || '' };
+}
+function renderNav() {
+  const c = counts();
+  $('#nav').replaceChildren(...VIEWS.map(([k, label]) => k === 'group' ? h('div', { class: 'nav-group' }, label) :
+    h('a', { href: '#' + k, class: S.view === k ? 'on' : '', 'aria-current': S.view === k ? 'page' : null }, icon(k), label, c[k] ? h('span', { class: 'count' }, c[k]) : null)));
+}
+function renderConn() {
+  const st = (label, cls, text) => h('div', { class: 'conn-row' }, h('span', { class: 'dot ' + cls }), h('span', {}, label + ': ', h('span', { class: 'muted' }, text)));
+  const store = S.mode === 'db' ? ['ok', 'saved to your account'] : S.mode === 'local' ? ['warn', 'this device only'] : ['', 'connecting'];
+  const claudeS = CAP.sample === undefined ? ['', 'on first use'] : CAP.sample ? ['ok', 'available'] : ['bad', 'not available'];
+  const mail = S.lastMailErr ? ['bad', 'needs attention'] : CAP.mcp === undefined ? ['', 'on first search'] : CAP.mcp ? ['ok', 'Gmail'] : ['bad', 'not available'];
+  $('#conn').replaceChildren(st('Workspace', ...store), st('Claude', ...claudeS), st('Mailbox', ...mail), st('Files', ...(CAP.assets ? ['ok', 'stored with the page'] : CAP.assets === null ? ['warn', 'kept on this device'] : ['', 'checking'])));
+}
+let pendingRender = false;
+function isEditing() { const a = document.activeElement; return a && a.closest && a.closest('#view') && (a.matches('input,textarea,select,[contenteditable]')) && !a.matches('[type=checkbox],[type=file]'); }
+function scheduleRender() { if (isEditing()) { pendingRender = true; renderNav(); renderConn(); return; } render(); }
+document.addEventListener('focusout', () => setTimeout(() => { if (pendingRender && !isEditing()) { pendingRender = false; render(); } }, 120));
+function render() {
+  pendingRender = false; renderNav(); renderConn();
+  const v = document.getElementById('view'); const fn = VIEW_FN[S.view] || VIEW_FN.overview;
+  if (S.view === 'home') setTimeout(fillInstall, 0);
+  const y = window.scrollY; const keepScroll = v.dataset.view === S.view;
+  if (S.mode === 'pending' || S.mode === 'db-wait') { v.replaceChildren(h('div', { class: 'empty' }, h('div', { class: 'pulse' }), h('div', {}, 'Opening your workspace…'))); return; }
+  document.body.classList.toggle('landing', S.view === 'home');
+  v.dataset.view = S.view; v.replaceChildren(...[fn()].flat(Infinity).filter(x => x != null && x !== false));
+  if (keepScroll) window.scrollTo(0, y);
+}
+function go(view) { if (location.hash !== '#' + view) location.hash = view; else { S.view = view; render(); } }
+window.addEventListener('hashchange', () => { const v = location.hash.slice(1); if (VIEW_FN[v]) { S.view = v; render(); window.scrollTo(0, 0); } });
+const pageHead = (eyebrow, title, lede, ...actions) => h('div', { class: 'head' }, h('div', { style: 'min-width:0' }, h('div', { class: 'eyebrow' }, eyebrow), h('h1', {}, title), lede ? h('p', { class: 'lede' }, lede) : null), actions.length ? h('div', { class: 'row' }, actions) : null);
+const exPill = r => r.example ? h('span', { class: 'pill ex', title: 'Example data' }, 'Example') : null;
+
+/* ================= VIEWS ================= */
+const VIEW_FN = {};
+
+/* ----- App badge ----- */
+function badgeSVG(size) {
+  const id = 'b' + size; let ticks = '';
+  for (let i = 0; i < 60; i++) { const major = i % 5 === 0; ticks += `<rect x="253" y="${major ? 34 : 44}" width="6" height="${major ? 40 : 24}" rx="3" fill="#fff" opacity="${major ? .95 : .45}" transform="rotate(${i * 6} 256 256)"/>`; }
+  return `<svg width="${size}" height="${size}" viewBox="0 0 512 512" aria-hidden="true"><defs><radialGradient id="${id}g" cx=".5" cy=".42" r=".78"><stop offset="0" stop-color="#6cc39b"/><stop offset=".38" stop-color="#2f8463"/><stop offset=".75" stop-color="#145040"/><stop offset="1" stop-color="#082a20"/></radialGradient><radialGradient id="${id}h" cx=".5" cy=".28" r=".6"><stop offset="0" stop-color="#f4fff9" stop-opacity=".42"/><stop offset="1" stop-color="#f4fff9" stop-opacity="0"/></radialGradient></defs><rect width="512" height="512" rx="116" fill="url(#${id}g)"/><rect width="512" height="512" rx="116" fill="url(#${id}h)"/><g>${ticks}</g><circle cx="256" cy="256" r="150" fill="#fff"/><circle cx="256" cy="256" r="150" fill="none" stroke="#d6b062" stroke-width="9"/><text x="250" y="304" text-anchor="middle" font-family="Newsreader, Georgia, serif" font-style="italic" font-weight="600" font-size="150" letter-spacing="-6" fill="#0f3b2e">IC</text><path d="M200 334h112" stroke="#c99f4b" stroke-width="12" stroke-linecap="round"/></svg>`;
+}
+
+/* ----- Home (welcome) ----- */
+async function fillInstall() {
+  if (CAP.desktop === undefined) CAP.desktop = await use('desktop');
+  const d = CAP.desktop; if (!d || !d.install) return;
+  let st; try { st = await d.install.state(); } catch { return; }
+  const slot = document.getElementById('install-slot'); if (!slot) return;
+  if (st === 'available') slot.replaceChildren(h('button', { class: 'btn sm', onclick: async () => { try { const r = await d.install.request(); toast(r === 'installed' ? 'Installing An Inspector Calls on this computer…' : r === 'cancelled' ? 'Install cancelled.' : 'Installing is not available here.'); } catch { toast('The install did not start.'); } } }, 'Install on this computer'));
+  else if (st === 'installed') slot.replaceChildren(h('span', { class: 'small muted' }, 'Installed on this computer'));
+}
+function greeting() {
+  const hr = new Date().getHours();
+  const part = hr < 5 || hr >= 22 ? 'Working late' : hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening';
+  const words = String(ws().inspector || '').trim().split(/\s+/).filter(x => x && !/^(mr|mrs|ms|miss|mx|dr|inspector)\.?$/i.test(x));
+  return part + ', Inspector' + (words.length ? ' ' + words[words.length - 1] : '');
+}
+VIEW_FN.home = () => {
+  const w = ws(); const docs = all('doc'); const pages = docs.reduce((a, d) => a + (d.pages || 0), 0);
+  const acts = all('act'); const done = acts.filter(a => a.status === 'Done').length; const openA = acts.filter(a => a.status !== 'Done');
+  const items = [];
+  for (const a of openA) { const d = daysUntil(a.due); if (a.due && d < 0) items.push({ cls: 'bad', t: `${a.ref ? a.ref + ' ' : ''}overdue by ${plural(-d, 'day')}: ${clip(a.action, 70)}`, o: d }); else if (a.due && d <= 7) items.push({ cls: 'warn', t: `${a.ref ? a.ref + ' ' : ''}due ${d === 0 ? 'today' : 'in ' + plural(d, 'day')}: ${clip(a.action, 70)}`, o: d }); }
+  for (const x of all('dl')) { const d = daysUntil(x.date); if (x.date && d >= 0 && d <= 7) items.push({ cls: d <= 2 ? 'warn' : '', t: `${x.title}, ${d === 0 ? 'today' : d === 1 ? 'tomorrow' : fmtDate(x.date, { weekday: 'long', day: 'numeric', month: 'short' })}`, o: d }); }
+  const toRead = all('miq').filter(m => m.status === 'Responses received').length;
+  if (toRead) items.push({ cls: '', t: `${plural(toRead, 'question')} with responses to read`, o: 99 });
+  items.sort((a, b) => a.o - b.o);
+  const pct = acts.length ? done / acts.length : 0; const C = 2 * Math.PI * 42;
+  const dial = h('div', { class: 'dial' }); dial.innerHTML = `<svg viewBox="0 0 100 100" width="92" height="92" aria-hidden="true"><circle cx="50" cy="50" r="42" fill="none" stroke="var(--line)" stroke-width="11"/><circle cx="50" cy="50" r="42" fill="none" stroke="var(--accent)" stroke-width="11" stroke-linecap="round" stroke-dasharray="${(pct * C).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 50 50)"/><text x="50" y="57" text-anchor="middle" font-size="24" font-weight="700" fill="var(--ink)" font-family="Hanken Grotesk, sans-serif">${items.length}</text></svg>`;
+  const tile = (view, ic, title, sub) => h('button', { class: 'tile', onclick: () => go(view) }, h('span', { class: 'ti' }, icon(ic, 20)), h('span', { style: 'min-width:0' }, h('b', {}, title), h('span', {}, sub)));
+  const concerns = all('snd').filter(r => TESTS.some(t => ['concern', 'unsound'].includes((r.t || {})[t.k]))).length;
+  const top = h('div', { class: 'hero-top' }); top.insertAdjacentHTML('afterbegin', badgeSVG(104));
+  top.append(h('div', { style: 'min-width:0;flex:1' }, h('h1', {}, 'An Inspector Calls'), h('p', { class: 'greet' }, greeting() + '.'),
+    h('div', { class: 'hero-meta' }, fmtDate(todayISO(), { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }), w.plan ? ' · ' + w.plan + ' · ' + (stagesFor(w)[w.stage] || '') : null,
+      !w.inspector ? [' · ', h('button', { onclick: () => { S.editWs = true; go('overview'); } }, 'Add your name')] : null)));
+  return [
+    h('section', { class: 'hero-band' }, h('div', { class: 'land-in' }, top,
+      h('form', { class: 'hero-ask', onsubmit: e => { e.preventDefault(); const q = $('#home-q').value.trim(); if (!q) return go('ask'); runAsk(q); } },
+        h('input', { id: 'home-q', placeholder: docs.length ? 'What do you need, Inspector? Ask the examination library…' : 'Add documents to the library, then ask anything…', 'aria-label': 'Ask the library' }),
+        h('button', { type: 'submit' }, docs.length ? 'Ask' : 'Open library')))),
+    h('div', { class: 'land-in land-body' },
+      h('div', { class: 'docket' }, dial, h('div', { style: 'min-width:0;flex:1' }, h('div', { class: 'eyebrow' }, 'This week'),
+        h('b', { class: 'big' }, items.length ? `${plural(items.length, 'thing needs', 'things need')} your attention` : 'Nothing pressing this week'),
+        items.length ? h('div', { class: 'dk-list' }, items.slice(0, 5).map(x => h('div', { class: 'dk ' + x.cls }, h('i'), h('span', {}, x.t)))) : h('div', { class: 'muted small', style: 'margin-top:6px' }, acts.length ? `${done} of ${plural(acts.length, 'action')} complete.` : 'Add hearing dates and action points and they will show up here.')),
+        h('button', { class: 'btn primary', onclick: () => go('overview') }, 'Open the workspace →')),
+      h('div', { class: 'tiles' },
+        tile('ask', 'ask', 'Ask the library', docs.length ? plural(docs.length, 'document') + ' ready' : 'Add documents first'),
+        tile('email', 'email', 'Search your email', 'Gmail, read-only'),
+        tile('library', 'upload', 'Drop in documents', pages ? pages.toLocaleString('en-GB') + ' pages indexed' : 'PDF, Word, Excel and more'),
+        tile('notes', 'notes', 'Notes & findings', plural(all('note').length, 'note')),
+        tile('soundness', 'soundness', 'Soundness tests', concerns ? plural(concerns, 'concern') : plural(all('snd').length, 'policy', 'policies') + ' assessed'),
+        tile('reports', 'reports', 'Reports & PDFs', 'Letters, notes and schedules')),
+      h('div', { class: 'land-foot' }, h('span', { id: 'install-slot' }), h('span', {}, S.mode === 'db' ? 'Your workspace is private to you and saved to your Claude account.' : 'Working on this device only.'), [...S.items.values()].some(r => r.example) ? h('span', {}, 'Includes example records.') : !docs.length && S.items.size <= 1 ? h('button', { class: 'btn ghost sm', onclick: seedExamples }, 'Load an example examination') : null))
+  ];
+};
+
+/* ----- Overview ----- */
+VIEW_FN.overview = () => {
+  const w = ws(); const docs = all('doc'); const pages = docs.reduce((a, d) => a + (d.pages || 0), 0);
+  const acts = all('act'); const openA = acts.filter(a => a.status !== 'Done'); const overdue = openA.filter(a => a.due && daysUntil(a.due) < 0);
+  const miqs = all('miq'); const miqOpen = miqs.filter(m => !['Closed', 'Discussed'].includes(m.status));
+  const mms = all('mm'); const snd = all('snd'); const concerns = snd.filter(r => TESTS.some(t => ['concern', 'unsound'].includes((r.t || {})[t.k])));
+  const isEmpty = !docs.length && S.items.size <= 1;
+  const editing = S.editWs;
+  const header = h('div', { class: 'card', style: 'padding:22px' },
+    h('div', { class: 'row', style: 'justify-content:space-between;align-items:flex-start' },
+      h('div', { style: 'min-width:0;flex:1' }, h('div', { class: 'eyebrow' }, w.caseRef ? 'Examination · ' + w.caseRef : 'Examination'),
+        h('h1', {}, w.plan || 'Name your examination'), h('p', { class: 'lede' }, [w.lpa, w.inspector ? 'Inspector: ' + w.inspector : null, w.submitted ? 'Submitted ' + fmtDate(w.submitted) : null].filter(Boolean).join(' · ') || 'Add the plan, the council and key dates so Claude has the right context.')),
+      h('button', { class: 'btn sm', onclick: () => { S.editWs = !S.editWs; render(); } }, editing ? 'Done' : 'Edit details')),
+    editing ? h('div', { class: 'grid3', style: 'margin-top:16px' },
+      h('label', { class: 'f' }, 'Type of examination', h('select', { class: 'input', id: 'ws-type', onchange: async e => { await putWs({ type: e.target.value, stage: Math.min(+w.stage || 0, stagesFor({ type: e.target.value }).length - 1) }); e.target.blur(); render(); } },
+        h('option', { value: 'lp', selected: w.type !== 'nsip' }, 'Local plan'), h('option', { value: 'nsip', selected: w.type === 'nsip' }, 'NSIP / development consent order'))),
+      ...[['plan', w.type === 'nsip' ? 'Project name' : 'Plan name'], ['lpa', w.type === 'nsip' ? 'Applicant' : 'Local planning authority'], ['caseRef', 'Case reference'], ['inspector', w.type === 'nsip' ? 'Examining Authority' : 'Inspector'], ['po', w.type === 'nsip' ? 'Case manager' : 'Programme officer'], ['submitted', w.type === 'nsip' ? 'Application accepted' : 'Submission date', 'date']].map(([k, l, t]) =>
+        h('label', { class: 'f' }, l, h('input', { class: 'input', id: 'ws-' + k, type: t || 'text', value: w[k] || '', onchange: e => putWs({ [k]: e.target.value }) })))) : null,
+    h('div', { class: 'stepper', role: 'list', 'aria-label': 'Examination stage' }, stagesFor(w).map((s, i) => h('button', { class: 'step ' + (i < w.stage ? 'done' : i === +w.stage ? 'cur' : ''), role: 'listitem', title: 'Set stage: ' + s, onclick: () => putWs({ stage: i }) }, h('i'), s))));
+  const stat = (n, l, s, view) => h('button', { class: 'stat', onclick: () => go(view) }, h('div', { class: 'n' }, n), h('div', { class: 'l' }, l), h('div', { class: 's' }, s));
+  const stats = h('div', { class: 'stats' },
+    stat(docs.length, 'Library documents', pages ? pages.toLocaleString('en-GB') + ' pages indexed' : 'Drop files to begin', 'library'),
+    stat(miqOpen.length, 'Questions open', plural(miqs.length, 'question') + ' in total', 'miqs'),
+    stat(openA.length, 'Actions open', overdue.length ? overdue.length + ' overdue' : 'None overdue', 'actions'),
+    stat(mms.length, 'Main modifications', mms.filter(m => m.status === 'Agreed').length + ' agreed', 'mods'),
+    stat(concerns.length, 'Soundness concerns', plural(snd.length, 'policy', 'policies') + ' assessed', 'soundness'));
+  const upcoming = [...all('dl').map(d => ({ date: d.date, title: d.title, sub: d.type, ex: d.example })), ...openA.filter(a => a.due).map(a => ({ date: a.due, title: (a.ref ? a.ref + ': ' : '') + clip(a.action, 80), sub: 'Action · ' + (a.owner || ''), ex: a.example }))]
+    .filter(x => x.date && daysUntil(x.date) >= -7).sort((a, b) => a.date.localeCompare(b.date)).slice(0, 6);
+  const dl = h('div', { class: 'card' }, h('div', { class: 'card-h' }, h('h2', {}, 'Coming up'), h('button', { class: 'btn ghost sm', onclick: () => go('deadlines') }, 'All deadlines')),
+    upcoming.length ? h('div', { class: 'list' }, upcoming.map(x => { const d = daysUntil(x.date); return h('div', { class: 'li' }, h('div', { class: 'date-badge' }, h('b', {}, new Date(x.date + 'T12:00').getDate()), h('span', {}, fmtDate(x.date, { month: 'short' }))), h('div', { class: 'grow' }, h('div', {}, x.title), h('div', { class: 'small muted' }, x.sub)), h('span', { class: 'pill ' + (d < 0 ? 'bad' : d <= 7 ? 'warn' : '') }, d < 0 ? Math.abs(d) + 'd overdue' : d === 0 ? 'Today' : 'in ' + d + 'd')); }))
+      : h('div', { class: 'muted small' }, 'No dates yet. Add hearing dates and consultation deadlines under Deadlines.'));
+  const notes = all('note').sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0)).slice(0, 5);
+  const nl = h('div', { class: 'card' }, h('div', { class: 'card-h' }, h('h2', {}, 'Latest notes & findings'), h('button', { class: 'btn ghost sm', onclick: () => go('notes') }, 'Open notes')),
+    notes.length ? h('div', { class: 'list' }, notes.map(n => h('div', { class: 'li', style: 'cursor:pointer', onclick: () => { S.noteSel = n.id; go('notes'); } }, h('div', { class: 'grow' }, h('div', { style: 'font-weight:600' }, n.title || 'Untitled'), h('div', { class: 'small muted' }, clip(plainCites(n.body).replace(/[#*>]/g, ''), 120))), h('span', { class: 'pill ' + (n.type === 'finding' ? 'acc' : '') }, n.type === 'finding' ? 'Finding' : n.type === 'draft' ? 'Draft' : 'Note'))))
+      : h('div', { class: 'muted small' }, 'Answers you save from the library or mailbox appear here.'));
+  const quick = h('form', { class: 'card', onsubmit: e => { e.preventDefault(); const q = $('#quick-q').value.trim(); if (!q) return; S.ask.draft = ''; go('ask'); setTimeout(() => runAsk(q), 30); } },
+    h('div', { class: 'card-h' }, h('h2', {}, 'Ask the library'), h('span', { class: 'small muted' }, docs.length ? 'Searches ' + plural(docs.length, 'document') + ' and cites the page' : 'Add documents first')),
+    h('div', { class: 'row', style: 'flex-wrap:nowrap' }, h('input', { class: 'input', id: 'quick-q', placeholder: 'e.g. How has the Council justified the housing requirement?' }), h('button', { class: 'btn primary', type: 'submit' }, 'Ask')));
+  const welcome = isEmpty ? h('div', { class: 'card', style: 'padding:22px' },
+    h('div', { class: 'card-h' }, h('h2', {}, 'Set up this examination'), h('button', { class: 'btn', onclick: seedExamples }, 'Load an example examination')),
+    h('div', { class: 'welcome' },
+      h('div', { class: 'w' }, h('b', {}, '1. Build the library'), h('span', { class: 'muted' }, 'Drop in the submission documents, evidence base, representations and hearing statements. Text is extracted and indexed page by page.')),
+      h('div', { class: 'w' }, h('b', {}, '2. Ask and check'), h('span', { class: 'muted' }, 'Ask Claude to find passages or reach a view. Every answer cites the document and page, so you can check the source in one click.')),
+      h('div', { class: 'w' }, h('b', {}, '3. Track and write'), h('span', { class: 'muted' }, 'Keep MIQs, hearing actions, main modifications and soundness views in one place, then produce letters, notes and schedules as PDFs.')))) : null;
+  return [header, welcome, stats, quick, h('div', { class: 'grid2' }, dl, nl),
+    [...S.items.values()].some(r => r.example) ? h('div', { class: 'notice' }, h('span', { style: 'flex:1' }, 'This workspace contains example records marked “Example”.'), h('button', { class: 'btn sm', onclick: clearExamples }, 'Remove examples')) : null];
+};
+
+/* ----- Library ----- */
+function queueView() {
+  const active = S.queue.filter(q => !q.cleared);
+  if (!active.length) return h('div', { id: 'queue' });
+  return h('div', { class: 'card', id: 'queue' }, h('div', { class: 'card-h' }, h('h3', {}, 'Processing ' + plural(active.length, 'file')), active.every(q => q.done) ? h('button', { class: 'btn ghost sm', onclick: () => { S.queue.forEach(q => q.cleared = true); paintQueue(); } }, 'Clear') : null),
+    h('div', { class: 'stack' }, active.map(q => h('div', { class: 'stack', style: 'gap:4px' }, h('div', { class: 'row', style: 'justify-content:space-between;flex-wrap:nowrap' }, h('span', { style: 'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0' }, (q.code ? q.code + ' · ' : '') + q.name), h('span', { class: 'small ' + (q.failed ? '' : 'muted'), style: q.failed ? 'color:var(--bad)' : '' }, q.status + (q.status === 'Reading' ? ' ' + Math.round(q.pct * 100) + '%' : ''))), h('div', { class: 'bar' }, h('i', { style: 'width:' + Math.round((q.done ? 1 : q.pct) * 100) + '%' }))))));
+}
+VIEW_FN.library = () => {
+  const docs = all('doc'); const f = S.libFilter || { cat: 'all', sort: 'code' };
+  const fileIn = h('input', { type: 'file', multiple: true, hidden: true, accept: '.pdf,.docx,.txt,.md,.csv,.xlsx,.xls,.ods,.html,.htm,.eml,.json,.rtf,.xml', onchange: e => { enqueue([...e.target.files]); e.target.value = ''; } });
+  const drop = h('div', { class: 'drop', tabindex: '0', role: 'button', 'aria-label': 'Add files to the library',
+    onclick: () => fileIn.click(), onkeydown: e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileIn.click(); } },
+    ondragover: e => { e.preventDefault(); drop.classList.add('over'); }, ondragleave: () => drop.classList.remove('over'),
+    ondrop: e => { e.preventDefault(); drop.classList.remove('over'); enqueue([...e.dataTransfer.files]); } },
+    h('div', { style: 'color:var(--accent);display:flex;justify-content:center' }, icon('upload', 26)), h('h2', {}, 'Drop documents here, or choose files'),
+    h('div', { class: 'muted small', style: 'margin-top:4px' }, 'PDF, Word, Excel, text, CSV, HTML and saved emails. Add as many as you like; each is read page by page and given a code (D1, D2…) for citations.'), fileIn);
+  const instant = h('div', { class: 'card' }, h('div', { class: 'card-h' }, h('h2', {}, 'Instant search'), h('span', { class: 'small muted' }, 'Keyword search across every page, no Claude needed')),
+    h('form', { class: 'row', style: 'flex-wrap:nowrap', onsubmit: async e => { e.preventDefault(); const q = $('#lib-q').value.trim(); S.libQ = q; const box = $('#lib-results'); box.replaceChildren(h('div', { class: 'thinking' }, h('span', { class: 'pulse' }), 'Searching…')); await loadAllTexts(); box.replaceWith(libResults(q)); } },
+      h('input', { class: 'input', id: 'lib-q', placeholder: 'e.g. five year housing land supply', value: S.libQ || '', oninput: e => { S.libQ = e.target.value; } }), h('button', { class: 'btn primary', type: 'submit' }, 'Search')), S.libQ && INDEX ? libResults(S.libQ) : h('div', { id: 'lib-results' }));
+  let rows = docs.filter(d => f.cat === 'all' || d.category === f.cat);
+  rows.sort(f.sort === 'name' ? (a, b) => natural(a.name, b.name) : f.sort === 'recent' ? (a, b) => (b.addedAt || 0) - (a.addedAt || 0) : (a, b) => natural(a.code, b.code));
+  const table = h('div', { class: 'card flush' }, h('div', { class: 'card-h', style: 'padding:14px 16px 0' }, h('h2', {}, 'Examination library'),
+    h('div', { class: 'row' }, h('select', { class: 'select', style: 'width:auto', id: 'lib-cat', onchange: e => { S.libFilter = { ...f, cat: e.target.value }; render(); } }, h('option', { value: 'all' }, 'All categories'), CATS.map(c => h('option', { value: c, selected: f.cat === c }, c))),
+      h('select', { class: 'select', style: 'width:auto', id: 'lib-sort', onchange: e => { S.libFilter = { ...f, sort: e.target.value }; render(); } }, [['code', 'By code'], ['name', 'By name'], ['recent', 'Recently added']].map(([v, l]) => h('option', { value: v, selected: f.sort === v }, l))))),
+    rows.length ? h('div', { class: 'tbl-wrap' }, h('table', { class: 'tbl' }, h('thead', {}, h('tr', {}, ['Code', 'Exam ref', 'Document', 'Category', 'Pages', ''].map(t => h('th', {}, t)))),
+      h('tbody', {}, rows.map(d => h('tr', {},
+        h('td', { class: 'mono', style: 'padding-top:10px' }, d.code),
+        h('td', { style: 'width:110px' }, h('input', { class: 'cell mono', id: 'ref-' + d.id, value: d.ref || '', placeholder: 'e.g. SD01', 'aria-label': 'Examination library reference', onchange: e => Store.put(d.id, { ...d, ref: e.target.value.trim() }) })),
+        h('td', { style: 'min-width:220px;padding-top:10px' }, h('button', { class: 'btn ghost sm', style: 'padding:0;font-weight:600;white-space:normal;text-align:left', onclick: () => openDoc(d, 1) }, d.name), h('div', { class: 'small muted' }, fmtBytes(d.size || 0), d.source === 'email' ? ' · from mailbox' : '', d.noText ? h('span', { class: 'pill warn', style: 'margin-left:6px' }, 'No text') : null, !d.textAsset && CAP.assets !== undefined && S.mode === 'db' ? h('span', { class: 'pill', style: 'margin-left:6px', title: 'Text is cached on this device only' }, 'This device') : null)),
+        h('td', { style: 'width:190px' }, h('select', { class: 'cell', id: 'cat-' + d.id, 'aria-label': 'Category', onchange: e => Store.put(d.id, { ...d, category: e.target.value }) }, CATS.map(c => h('option', { value: c, selected: d.category === c }, c)))),
+        h('td', { class: 'num', style: 'padding-top:10px' }, d.pages),
+        h('td', { style: 'white-space:nowrap;text-align:right' }, d.fileAsset ? h('a', { class: 'btn ghost sm', href: '/_blob/' + d.fileAsset, target: '_blank', rel: 'noopener' }, 'Original') : null, h('button', { class: 'btn ghost sm danger', onclick: () => deleteDoc(d) }, 'Remove')))))))
+      : h('div', { class: 'empty' }, h('h3', {}, docs.length ? 'Nothing in this category' : 'The library is empty'), h('div', {}, docs.length ? 'Choose another category.' : 'Add the plan, its evidence base and the representations to start.')));
+  return [pageHead('Workspace', 'Library', 'Every document is split into pages and indexed so Claude can find passages and cite them precisely.'), drop, queueView(), docs.length ? instant : null, table];
+};
+function libResults(q) {
+  const r = searchIndex(q, { limit: 20 });
+  return h('div', { id: 'lib-results', class: 'list', style: 'margin-top:10px' }, r.length ? r.map(x => h('div', { class: 'li' }, h('button', { class: 'cite', onclick: () => openDoc(x.doc, x.page, q) }, docLabel(x.doc) + ' ' + unit(x.doc) + x.page), h('div', { class: 'grow' }, h('div', { class: 'small', style: 'font-weight:600' }, x.doc.name), h('div', { class: 'small muted' }, highlight(excerpt(x.text, q, 300), q)))))
+    : h('div', { class: 'muted small' }, 'No passages match. Try other wording, or ask Claude, which searches with synonyms.'));
+}
+async function deleteDoc(d) {
+  if (!await confirmBox('Remove ' + d.code + '?', `“${d.name}” and its extracted text will be removed from the library. Citations to ${d.code} in saved notes will stop working.`, 'Remove')) return;
+  await Store.del(d.id); IDB.del(d.id); TEXT.delete(d.id); invalidateIndex();
+  if (CAP.assets) { for (const a of [d.textAsset, d.fileAsset]) if (a) CAP.assets.delete(a).catch(() => {}); }
+  render(); toast('Removed ' + d.code);
+}
+async function openDoc(d, page = 1, q) {
+  const body = h('div', { class: 'stack' }, h('div', { class: 'thinking' }, h('span', { class: 'pulse' }), 'Loading text…'));
+  const pnum = h('input', { class: 'input', type: 'number', min: 1, style: 'width:80px', value: page, id: 'doc-page', 'aria-label': 'Page' });
+  const total = h('span', { class: 'muted small' }, '');
+  const show = async p => {
+    const pages = await getText(d); if (!pages.length) { body.replaceChildren(h('div', { class: 'notice warn' }, d.noText ? 'This file has no text layer (it is probably a scan), so it cannot be searched. Open the original to read it.' : 'The extracted text for this document is not available on this device.')); return; }
+    p = Math.min(pages.length, Math.max(1, p)); pnum.value = p; total.textContent = 'of ' + pages.length;
+    body.replaceChildren(h('div', { class: 'pagetext' }, q ? highlight(pages[p - 1] || '', q) : (pages[p - 1] || '(blank page)')));
+    const m = body.querySelector('mark'); if (m) m.scrollIntoView({ block: 'center' }); else body.parentElement && (body.parentElement.scrollTop = 0);
+  };
+  pnum.onchange = () => show(+pnum.value);
+  openDrawer([h('div', { class: 'eyebrow' }, d.code + (d.ref ? ' · ' + d.ref : '') + ' · ' + d.category), h('h2', { style: 'overflow-wrap:anywhere' }, d.name)], body,
+    [h('button', { class: 'btn sm', onclick: () => show(+pnum.value - 1) }, '← Previous'), h('span', { class: 'small muted' }, d.paged === false ? 'Section' : 'Page'), pnum, total, h('button', { class: 'btn sm', onclick: () => show(+pnum.value + 1) }, 'Next →'), h('span', { style: 'flex:1' }),
+      d.fileAsset ? h('a', { class: 'btn sm', href: '/_blob/' + d.fileAsset + (d.paged ? '#page=' + page : ''), target: '_blank', rel: 'noopener' }, 'Open original') : null]);
+  show(page);
+}
+
+/* ----- Ask the library ----- */
+const PRESETS = [
+  'Summarise the representations by main issue, naming who raised each point',
+  'How has the Council derived and justified the housing requirement?',
+  'Is there evidence that the duty to cooperate has been met?',
+  'Find inconsistencies between the plan policies and the evidence base',
+  'Which site allocations raise flood risk, highways or heritage concerns?',
+  'Which policies may not be effective because they are vague or unenforceable?'
+];
+VIEW_FN.ask = () => {
+  const A = S.ask; const docs = all('doc');
+  const composer = h('form', { class: 'card', onsubmit: e => { e.preventDefault(); const q = $('#ask-q').value.trim(); if (q) { A.draft = ''; runAsk(q); } } },
+    h('div', { class: 'row', style: 'justify-content:space-between;margin-bottom:10px' },
+      h('div', { class: 'seg', role: 'tablist' }, [['find', 'Find passages'], ['analyse', 'Analyse & conclude']].map(([k, l]) => h('button', { type: 'button', class: A.mode === k ? 'on' : '', 'aria-pressed': A.mode === k ? 'true' : 'false', onclick: () => { A.mode = k; render(); } }, l))),
+      h('select', { class: 'select', style: 'width:auto', id: 'ask-scope', 'aria-label': 'Scope', onchange: e => { A.scope = e.target.value; } }, h('option', { value: 'all' }, 'Whole library'), CATS.map(c => h('option', { value: c, selected: A.scope === c }, c)))),
+    h('textarea', { class: 'textarea', id: 'ask-q', rows: 3, placeholder: A.entries.length ? 'Ask a follow-up…' : 'Ask anything about the examination documents…', value: A.draft, oninput: e => A.draft = e.target.value, onkeydown: e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); e.target.form.requestSubmit(); } } }),
+    h('div', { class: 'row', style: 'justify-content:space-between;margin-top:10px' },
+      h('span', { class: 'small muted' }, A.mode === 'analyse' ? 'Uses Claude\'s most capable model and reads widely. Takes a minute or two.' : 'Finds and quotes the relevant passages with page references.', ' ', h('span', { class: 'kbd' }, 'Ctrl'), '+', h('span', { class: 'kbd' }, 'Enter')),
+      h('div', { class: 'row' }, A.entries.length ? h('button', { type: 'button', class: 'btn ghost', onclick: () => { A.entries = []; render(); } }, 'New conversation') : null, h('button', { class: 'btn primary', type: 'submit', disabled: !docs.length }, 'Ask Claude'))),
+    !A.entries.length ? h('div', { class: 'row', style: 'margin-top:14px' }, PRESETS.map(p => h('button', { type: 'button', class: 'chip', onclick: () => { A.mode = /summar|inconsisten|which|evidence/i.test(p) ? 'analyse' : A.mode; runAsk(p); } }, p))) : null);
+  const convo = h('div', { class: 'convo' }, A.entries.map(e => qaView(e, 'lib')));
+  return [pageHead('Workspace', 'Ask the library', docs.length ? `Claude searches all ${plural(docs.length, 'document')} and cites each point to a page. Click a citation to check the source.` : 'Add documents to the library first. Claude can only answer from what is in it.'), !docs.length ? h('div', { class: 'notice' }, h('span', { style: 'flex:1' }, 'The library is empty.'), h('button', { class: 'btn sm primary', onclick: () => go('library') }, 'Add documents')) : null, composer, convo];
+};
+function qaView(e, kind) {
+  const act = h('div', { class: 'activity', id: 'act-' + e.id, hidden: !e.activity.length }, e.activity.map(a => h('span', {}, a)));
+  const body = h('div', { class: 'qa-a', id: 'ans-' + e.id }, answerBody(e));
+  const foot = h('div', { class: 'qa-f', id: 'foot-' + e.id }, footButtons(e, kind));
+  return h('div', { class: 'qa' }, h('div', { class: 'qa-q' }, h('span', { class: 'pill ' + (e.mode === 'analyse' ? 'acc' : kind === 'mail' ? 'info' : '') }, kind === 'mail' ? 'Mailbox' : e.mode === 'analyse' ? 'Analysis' : 'Find'), h('div', { class: 'q' }, e.q)), act, body, foot);
+}
+function answerBody(e) {
+  const parts = [];
+  if (e.status === 'thinking' && !e.text) parts.push(h('div', { class: 'thinking' }, h('span', { class: 'pulse' }), e.phase || 'Thinking…'));
+  if (e.text) parts.push(renderMd(e.text));
+  if (e.threads && e.threads.length) parts.push(h('div', { class: 'stack', style: 'margin-top:14px' }, h('h3', {}, 'Threads'), e.threads.map(t => mailCard(t))));
+  if (e.error) parts.push(h('div', { class: 'notice bad', style: 'margin-top:10px' }, e.error));
+  if (e.status === 'stopped') parts.push(h('div', { class: 'small muted', style: 'margin-top:8px' }, 'Stopped.'));
+  if (e.truncated) parts.push(h('div', { class: 'small muted', style: 'margin-top:8px' }, 'The answer was cut short. Ask a narrower question for the rest.'));
+  return parts;
+}
+function footButtons(e, kind) {
+  if (e.status === 'thinking' || e.status === 'writing') return [h('button', { class: 'btn sm', onclick: () => e.ctl && e.ctl.abort() }, 'Stop')];
+  if (!e.text) return [];
+  return [h('button', { class: 'btn sm', onclick: () => saveFinding(e, kind) }, e.savedId ? 'Saved ✓' : 'Save as finding'), h('button', { class: 'btn sm ghost', onclick: () => copyText(plainCites(e.text)) }, 'Copy'), h('button', { class: 'btn sm ghost', onclick: () => { startReportFrom(e); } }, 'Use in a report')];
+}
+function paintEntry(e, kind) {
+  const a = document.getElementById('ans-' + e.id); if (a) a.replaceChildren(...answerBody(e));
+  const act = document.getElementById('act-' + e.id); if (act) { act.hidden = !e.activity.length; act.replaceChildren(...e.activity.map(x => h('span', {}, x))); }
+  const f = document.getElementById('foot-' + e.id); if (f) f.replaceChildren(...footButtons(e, kind));
+}
+async function saveFinding(e, kind) {
+  if (e.savedId) { S.noteSel = e.savedId; go('notes'); return; }
+  const id = rid('note_'); e.savedId = id;
+  await Store.put(id, { kind: 'note', type: 'finding', title: clip(e.q, 90), body: e.text, source: kind === 'mail' ? 'mailbox' : 'library', createdAt: Date.now(), updatedAt: Date.now() });
+  paintEntry(e, kind); renderNav(); toast('Saved to Notes & findings');
+}
+async function runAsk(q) {
+  const A = S.ask; const e = { id: rid('e'), q, mode: A.mode, text: '', status: 'thinking', activity: [], phase: 'Preparing the library…' };
+  const history = A.entries.filter(x => x.text && x.status === 'done').slice(-3);
+  A.entries.push(e); if (S.view === 'ask') render(); else go('ask');
+  setTimeout(() => { const el = document.getElementById('ans-' + e.id); el && el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 60);
+  const sample = await ensureSample();
+  if (!sample) { e.status = 'error'; e.error = 'Claude is not available in this view. Open the page in Claude to ask questions. Instant search in the Library still works.'; return paintEntry(e, 'lib'); }
+  await loadAllTexts(n => { e.phase = `Loading text (${n})…`; paintEntry(e, 'lib'); });
+  buildIndex(); e.phase = 'Thinking…'; paintEntry(e, 'lib');
+  const cats = A.scope === 'all' ? null : [A.scope];
+  const log = s => { e.activity.push(s); paintEntry(e, 'lib'); };
+  let lead = LIB_RULES(e.mode) + (cats ? `\nRestrict yourself to documents in the category “${cats[0]}”.` : '') + '\n\nLibrary catalogue (code | exam ref | title | category | length):\n' + catalogue(cats);
+  if (!CAP.tools) { const r = searchIndex(q, { limit: 16, cats }); lead += '\n\nSearch tools are unavailable, so here are the best-matching passages:\n' + r.map(x => `--- ${x.doc.code} p.${x.page} (${x.doc.name})\n${excerpt(x.text, q, 1400)}`).join('\n'); }
+  const input = [{ role: 'user', content: lead }];
+  for (const h0 of history) input.push({ role: 'user', content: h0.q }, { role: 'assistant', content: h0.text });
+  input.push({ role: 'user', content: q });
+  e.ctl = new AbortController();
+  try {
+    const res = await sample(input, { ...(CAP.tools ? { tools: libTools(log, cats) } : { cache: false }), ...AI, signal: e.ctl.signal, onText: ({ text }) => { e.text = text; e.status = 'writing'; paintEntry(e, 'lib'); } });
+    e.text = res.text; e.truncated = res.truncated; e.status = 'done';
+  } catch (err) {
+    e.text = err.text || e.text; e.status = err.code === 'cancelled' ? 'stopped' : 'error'; if (err.code !== 'cancelled') e.error = sampleMsg(err);
+    if (err.code === 'tools_unavailable') CAP.tools = false;
+  }
+  paintEntry(e, 'lib'); renderConn();
+}
+
+/* ----- Email ----- */
+const MAIL_PRESETS = ['Emails from the programme officer in the last two weeks', 'Correspondence from the Council about the hearing timetable', 'Messages with attachments about housing land supply', 'Anything about the duty to cooperate with neighbouring authorities'];
+function mailCard(t) {
+  return h('div', { class: 'mail-card' }, h('div', { class: 'subj' }, t.subject || '(no subject)'), h('div', { class: 'meta' }, [t.from, t.date ? fmtDate(t.date) : null, t.count ? plural(t.count, 'message') : null].filter(Boolean).join(' · ')), t.snippet ? h('div', { class: 'snip' }, clip(t.snippet, 220)) : null,
+    h('div', { class: 'row', style: 'margin-top:4px' }, h('button', { class: 'btn sm', onclick: () => openThread(t.id) }, 'Read thread'), t.url && /^https:\/\//.test(t.url) ? h('a', { class: 'btn sm ghost', href: t.url, target: '_blank', rel: 'noopener' }, 'Open in Gmail') : null, h('button', { class: 'btn sm ghost', onclick: () => threadToLibrary(t.id) }, 'Add to library')));
+}
+VIEW_FN.email = () => {
+  const M = S.mail;
+  const composer = h('form', { class: 'card', onsubmit: e => { e.preventDefault(); const q = $('#mail-q').value.trim(); if (!q) return; M.draft = ''; M.mode === 'ask' ? runMail(q) : runDirect(q); } },
+    h('div', { class: 'row', style: 'justify-content:space-between;margin-bottom:10px' },
+      h('div', { class: 'seg' }, [['ask', 'Ask Claude'], ['direct', 'Gmail search']].map(([k, l]) => h('button', { type: 'button', class: M.mode === k ? 'on' : '', onclick: () => { M.mode = k; render(); } }, l))),
+      h('span', { class: 'small muted' }, M.mode === 'ask' ? 'Describe what you need in plain words. Claude builds the searches and reads the threads.' : 'Uses Gmail syntax directly, e.g. from:council.gov.uk has:attachment after:2026/10/01')),
+    h('div', { class: 'row', style: 'flex-wrap:nowrap' }, h('input', { class: 'input', id: 'mail-q', value: M.draft, oninput: e => M.draft = e.target.value, placeholder: M.mode === 'ask' ? 'e.g. Did the Council send the updated housing trajectory, and when?' : 'from:programme.officer subject:hearing' }), h('button', { class: 'btn primary', type: 'submit' }, M.mode === 'ask' ? 'Search mailbox' : 'Search')),
+    M.mode === 'ask' && !M.entries.length ? h('div', { class: 'row', style: 'margin-top:12px' }, MAIL_PRESETS.map(p => h('button', { type: 'button', class: 'chip', onclick: () => runMail(p) }, p))) : null);
+  const err = S.lastMailErr ? h('div', { class: 'notice bad' }, h('span', { style: 'flex:1' }, mcpMsg(S.lastMailErr)), h('button', { class: 'btn sm', onclick: () => { S.lastMailErr = null; render(); } }, 'Dismiss')) : null;
+  const direct = M.mode === 'direct' && M.direct ? h('div', { class: 'card' }, h('div', { class: 'card-h' }, h('h2', {}, M.direct.loading ? 'Searching…' : plural(M.direct.results.length, 'thread') + ' for “' + clip(M.direct.q, 50) + '”')),
+    M.direct.loading ? h('div', { class: 'thinking' }, h('span', { class: 'pulse' }), 'Searching your mailbox…') : M.direct.results.length ? h('div', { class: 'stack' }, M.direct.results.map(mailCard)) : h('div', { class: 'muted' }, 'No threads match.')) : null;
+  return [pageHead('Workspace', 'Email search', 'Search the mailbox linked to your Claude account. Nothing is changed or sent; threads are only read.'), err, composer, direct, M.mode === 'ask' ? h('div', { class: 'convo' }, [...M.entries].reverse().map(e => qaView(e, 'mail'))) : null];
+};
+async function runDirect(q) {
+  S.mail.direct = { q, loading: true, results: [] }; render();
+  try { S.mail.direct.results = await gmailSearch(q, 25); S.lastMailErr = null; } catch (e) { S.lastMailErr = e; }
+  S.mail.direct.loading = false; render();
+}
+async function runMail(q) {
+  const M = S.mail; const e = { id: rid('m'), q, mode: 'mail', text: '', status: 'thinking', activity: [], phase: 'Thinking…' };
+  M.entries.push(e); render();
+  const sample = await ensureSample();
+  if (!sample) { e.status = 'error'; e.error = 'Claude is not available in this view. Switch to “Gmail search” to search directly.'; return paintEntry(e, 'mail'); }
+  if (!CAP.tools) { e.status = 'error'; e.error = 'This view cannot let Claude search your mailbox. Switch to “Gmail search” to search directly.'; return paintEntry(e, 'mail'); }
+  const log = s => { e.activity.push(s); paintEntry(e, 'mail'); };
+  const prompt = `You help a senior UK planning inspector find things in their email, with care and precision. ${wsContext()}
+Request: ${q}
+
+Turn the request into Gmail searches and run several (synonyms, likely senders, date ranges; use quotes only for exact phrases). Open the most promising threads with gmail_read_thread to confirm before relying on them. Then answer briefly: what you found, who sent it and when, and the key content. Cite each thread inline as [[E:threadId]]. If nothing relevant turns up, say so and list the searches you ran.
+Finish with one final line exactly in this form, listing the most relevant thread ids first (at most 8): THREADS: id1, id2`;
+  e.ctl = new AbortController();
+  try {
+    const res = await sample(prompt, { tools: mailTools(log), ...AI, signal: e.ctl.signal, onText: ({ text }) => { e.text = stripThreads(text); e.status = 'writing'; paintEntry(e, 'mail'); } });
+    const m = res.text.match(/THREADS:\s*(.*)\s*$/); e.text = stripThreads(res.text); e.status = 'done';
+    const ids = m ? m[1].split(/[,\s]+/).map(s => s.trim()).filter(id => S.mailSeen.has(id)) : [];
+    e.threads = ids.slice(0, 8).map(id => S.mailSeen.get(id));
+  } catch (err) { e.text = stripThreads(err.text || e.text); e.status = err.code === 'cancelled' ? 'stopped' : 'error'; if (err.code !== 'cancelled') e.error = sampleMsg(err); }
+  paintEntry(e, 'mail'); renderConn();
+}
+const stripThreads = t => String(t || '').replace(/\n?THREADS:.*$/s, '').trim();
+async function openThread(id) {
+  const body = h('div', { class: 'thinking' }, h('span', { class: 'pulse' }), 'Opening thread…');
+  const meta = S.mailSeen.get(id) || {};
+  openDrawer([h('div', { class: 'eyebrow' }, 'Email thread'), h('h2', { style: 'overflow-wrap:anywhere' }, meta.subject || 'Thread')], body,
+    [h('button', { class: 'btn sm', onclick: () => threadToLibrary(id) }, 'Add to library'), meta.url && /^https:\/\//.test(meta.url) ? h('a', { class: 'btn sm ghost', href: meta.url, target: '_blank', rel: 'noopener' }, 'Open in Gmail') : null]);
+  try {
+    const t = await gmailThread(id);
+    body.replaceWith(h('div', { class: 'stack', style: 'gap:18px' }, t.messages.map(m => h('div', { class: 'stack', style: 'gap:6px;border-bottom:1px solid var(--line);padding-bottom:14px' },
+      h('div', { class: 'row', style: 'justify-content:space-between' }, h('b', { style: 'overflow-wrap:anywhere' }, m.from), h('span', { class: 'small muted' }, m.date ? fmtDate(m.date, { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '')),
+      m.to ? h('div', { class: 'small muted', style: 'overflow-wrap:anywhere' }, 'To ' + m.to) : null, h('div', { class: 'pagetext' }, m.body || '(no text)'),
+      m.attachments.length ? h('div', { class: 'row' }, m.attachments.map(a => h('span', { class: 'pill' }, '📎 ' + a))) : null))));
+  } catch (e) { S.lastMailErr = e; body.replaceWith(h('div', { class: 'notice bad' }, mcpMsg(e))); renderConn(); }
+}
+async function threadToLibrary(id) {
+  try {
+    toast('Adding thread to the library…');
+    const t = await gmailThread(id); const meta = S.mailSeen.get(id) || {};
+    const pages = t.messages.map(m => `From: ${m.from}\nTo: ${m.to}\nDate: ${m.date}\nSubject: ${m.subject}\n${m.attachments.length ? 'Attachments: ' + m.attachments.join(', ') + '\n' : ''}\n${m.body}`);
+    const did = rid('doc_'); const code = nextCode();
+    const rec = { kind: 'doc', code, ref: '', name: 'Email: ' + (meta.subject || 'thread'), category: 'Correspondence', size: pages.join('').length, type: 'message/rfc822', pages: pages.length, chars: pages.join('').length, paged: false, addedAt: Date.now(), source: 'email', threadId: id };
+    TEXT.set(did, pages); await IDB.put(did, pages);
+    if (CAP.assets) { try { const up = await CAP.assets.upload(new Blob([JSON.stringify({ pages })], { type: 'application/json' })); rec.textAsset = up.id; } catch {} }
+    await Store.put(did, rec); invalidateIndex(); renderNav(); toast(`Added as ${code}. Each message is one section.`);
+  } catch (e) { S.lastMailErr = e; toast(mcpMsg(e)); renderConn(); }
+}
+
+/* ----- Notes ----- */
+const NOTE_ACTIONS = [
+  ['tighten', 'Redraft in report style', false, 'Redraft this note as clear, measured prose suitable for an inspector\'s report or letter. Keep every substantive point and any [[D.. p..]] citations exactly as they are. UK English. Return only the redrafted text.'],
+  ['questions', 'Turn into questions for the Council', false, 'Turn the issues in this note into focused, neutrally worded questions an inspector could put to the Council (and, where relevant, other participants). Number them. Keep citations. Return only the questions.'],
+  ['check', 'Check against the library', true, 'Check each factual claim in this note against the examination library. For each claim say whether the documents support it, contradict it, or are silent, with citations. Finish with any corrections needed.'],
+  ['challenge', 'Stress-test for legal challenge', true, 'Stress-test the reasoning in this note as counsel for a party seeking to quash the decision would (s113 of the 2004 Act or s118 of the 2008 Act), then as the judge. Check it against the library. Look for: misreading of policy, failure to take into account a material consideration, inadequate or unintelligible reasons, procedural unfairness (a point not put to the parties), irrationality, and errors on the duty to cooperate, SEA, HRA or the public sector equality duty. For each weakness give its seriousness and the fix. Finish with Confidence and limits.'],
+  ['summary', 'Summarise in five bullets', false, 'Summarise this note in at most five bullets for a quick briefing. Keep citations.']
+];
+let noteTimer = null;
+VIEW_FN.notes = () => {
+  const notes = all('note').sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+  const shown = notes.filter(n => S.noteFilter === 'all' || (n.type || 'note') === S.noteFilter);
+  if (!S.noteSel || !S.items.has(S.noteSel)) S.noteSel = shown[0] && shown[0].id;
+  const sel = S.items.get(S.noteSel);
+  const listCol = h('div', { class: 'stack' },
+    h('div', { class: 'row', style: 'justify-content:space-between' }, h('div', { class: 'seg' }, [['all', 'All'], ['note', 'Notes'], ['finding', 'Findings'], ['draft', 'Drafts']].map(([k, l]) => h('button', { class: S.noteFilter === k ? 'on' : '', onclick: () => { S.noteFilter = k; S.noteSel = null; render(); } }, l)))),
+    h('button', { class: 'btn primary', onclick: newNote }, '+ New note'),
+    h('div', { class: 'stack', style: 'gap:2px' }, shown.length ? shown.map(n => h('button', { class: 'note-item' + (n.id === S.noteSel ? ' on' : ''), onclick: () => { S.noteSel = n.id; render(); } }, h('div', { class: 't' }, n.title || 'Untitled'), h('div', { class: 'p' }, (n.type === 'finding' ? 'Finding · ' : n.type === 'draft' ? 'Draft · ' : '') + fmtDate(new Date(n.updatedAt || n.createdAt || Date.now()).toISOString()) + ' · ' + clip(plainCites(n.body).replace(/[#*>\n]/g, ' '), 60))))
+      : h('div', { class: 'muted small', style: 'padding:8px' }, 'Nothing here yet.')));
+  let editor;
+  if (!sel) editor = h('div', { class: 'card empty' }, h('h3', {}, 'No note selected'), h('div', {}, 'Create a note, or save an answer from the library as a finding.'));
+  else {
+    const save = patch => { const cur = S.items.get(sel.id) || sel; S.items.set(sel.id, { ...cur, ...patch }); clearTimeout(noteTimer); noteTimer = setTimeout(() => Store.put(sel.id, { ...S.items.get(sel.id), updatedAt: Date.now() }), 700); };
+    const ai = S.noteAI[sel.id];
+    const preview = S.notePreview;
+    editor = h('div', { class: 'stack', style: 'gap:14px;min-width:0' },
+      h('div', { class: 'card stack', style: 'gap:12px' },
+        h('div', { class: 'row', style: 'justify-content:space-between' },
+          h('div', { class: 'row' }, h('select', { class: 'select', style: 'width:auto', id: 'note-type', 'aria-label': 'Type', onchange: e => { save({ type: e.target.value }); Store.put(sel.id, { ...S.items.get(sel.id), updatedAt: Date.now() }); } }, [['note', 'Note'], ['finding', 'Finding'], ['draft', 'Draft']].map(([v, l]) => h('option', { value: v, selected: (sel.type || 'note') === v }, l))),
+            h('input', { class: 'input', style: 'width:200px', id: 'note-matter', placeholder: 'Matter / policy (optional)', value: sel.matter || '', oninput: e => save({ matter: e.target.value }) }), exPill(sel)),
+          h('div', { class: 'row' }, h('div', { class: 'seg' }, h('button', { class: !preview ? 'on' : '', onclick: () => { S.notePreview = false; render(); } }, 'Write'), h('button', { class: preview ? 'on' : '', onclick: () => { S.notePreview = true; render(); } }, 'Preview')),
+            h('button', { class: 'btn ghost sm danger', onclick: async () => { if (await confirmBox('Delete this note?', 'This cannot be undone.')) { await Store.del(sel.id); S.noteSel = null; render(); } } }, 'Delete'))),
+        h('input', { class: 'title-input', id: 'note-title', value: sel.title || '', placeholder: 'Title', oninput: e => save({ title: e.target.value }) }),
+        preview ? h('div', { style: 'min-height:360px' }, renderMd(sel.body || '*Empty*'))
+          : h('textarea', { class: 'textarea editor', id: 'note-body', value: sel.body || '', placeholder: 'Write freely. Markdown works: # heading, - bullet, **bold**. Cite documents as [[D3 p.12]].', oninput: e => save({ body: e.target.value }) }),
+        h('div', { class: 'small muted' }, sel.source ? 'Saved from the ' + sel.source + '. ' : '', 'Saves automatically.')),
+      h('div', { class: 'card' }, h('div', { class: 'card-h' }, h('h3', {}, 'Work on this note with Claude')),
+        h('div', { class: 'row' }, NOTE_ACTIONS.map(([k, l]) => h('button', { class: 'chip', onclick: () => runNoteAI(sel.id, k) }, l))),
+        ai ? h('div', { style: 'margin-top:14px', class: 'stack' }, h('div', { id: 'noteai-' + sel.id }, noteAIBody(ai)), ai.status === 'done' ? h('div', { class: 'row' },
+          h('button', { class: 'btn sm', onclick: () => { Store.put(sel.id, { ...S.items.get(sel.id), body: (S.items.get(sel.id).body || '') + '\n\n' + ai.text, updatedAt: Date.now() }); delete S.noteAI[sel.id]; render(); } }, 'Append to note'),
+          h('button', { class: 'btn sm', onclick: () => { Store.put(sel.id, { ...S.items.get(sel.id), body: ai.text, updatedAt: Date.now() }); delete S.noteAI[sel.id]; render(); } }, 'Replace note text'),
+          h('button', { class: 'btn sm ghost', onclick: () => copyText(plainCites(ai.text)) }, 'Copy'), h('button', { class: 'btn sm ghost', onclick: () => { delete S.noteAI[sel.id]; render(); } }, 'Discard')) : ai.status === 'running' ? h('div', {}, h('button', { class: 'btn sm', onclick: () => ai.ctl && ai.ctl.abort() }, 'Stop')) : null) : null));
+  }
+  return [pageHead('Workspace', 'Notes & findings', 'Working notes, saved answers and drafts. Everything here can go into a report.'), h('div', { class: 'split' }, listCol, editor)];
+};
+function noteAIBody(ai) { return [ai.activity && ai.activity.length ? h('div', { class: 'small muted', style: 'margin-bottom:8px' }, ai.activity.join(' · ')) : null, ai.text ? renderMd(ai.text) : ai.status === 'running' ? h('div', { class: 'thinking' }, h('span', { class: 'pulse' }), 'Thinking…') : null, ai.error ? h('div', { class: 'notice bad' }, ai.error) : null]; }
+async function newNote() { const id = rid('note_'); await Store.put(id, { kind: 'note', type: S.noteFilter === 'all' ? 'note' : S.noteFilter, title: '', body: '', createdAt: Date.now(), updatedAt: Date.now() }); S.noteSel = id; S.notePreview = false; render(); setTimeout(() => { const t = $('#note-title'); t && t.focus(); }, 30); }
+async function runNoteAI(id, k) {
+  const n = S.items.get(id); const [, , needsLib, instr] = NOTE_ACTIONS.find(a => a[0] === k);
+  if (!(n.body || '').trim()) return toast('Write something in the note first.');
+  const ai = S.noteAI[id] = { status: 'running', text: '', activity: [] }; render();
+  const paint = () => { const el = document.getElementById('noteai-' + id); if (el) el.replaceChildren(...noteAIBody(ai)); };
+  const sample = await ensureSample(); if (!sample) { ai.status = 'error'; ai.error = 'Claude is not available in this view.'; return render(); }
+  if (needsLib) await loadAllTexts();
+  ai.ctl = new AbortController();
+  const useTools = needsLib && CAP.tools;
+  const prompt = (needsLib ? LIB_RULES('analyse') + '\n\nLibrary catalogue:\n' + catalogue() + '\n\n' : `${EXPERT()}\n\n${wsContext()}\n\n`) + instr + '\n\nNOTE TITLE: ' + (n.title || '') + '\nNOTE:\n' + n.body.slice(0, 60000);
+  try { const r = await sample(prompt, { ...(useTools ? { tools: libTools(s => { ai.activity.push(s); paint(); }) } : { cache: false }), ...AI, signal: ai.ctl.signal, onText: ({ text }) => { ai.text = text; paint(); } }); ai.text = r.text; ai.status = 'done'; }
+  catch (e) { ai.text = e.text || ai.text; ai.status = e.code === 'cancelled' ? 'stopped' : 'error'; if (e.code !== 'cancelled') ai.error = sampleMsg(e); if (ai.text) ai.status = 'done'; }
+  render();
+}
+
+/* ----- Soundness ----- */
+const TESTS = [{ k: 'legal', l: 'Legally compliant', s: 'Legal' }, { k: 'pp', l: 'Positively prepared', s: 'Pos. prepared' }, { k: 'just', l: 'Justified', s: 'Justified' }, { k: 'eff', l: 'Effective', s: 'Effective' }, { k: 'cons', l: 'Consistent with national policy', s: 'Consistent' }];
+const TSTATES = ['', 'ok', 'concern', 'unsound']; const TLABEL = { '': 'Not assessed', ok: 'Sound', concern: 'Concern', unsound: 'Unsound' };
+VIEW_FN.soundness = () => {
+  const rows = all('snd').sort((a, b) => natural(a.ref, b.ref));
+  const tbl = rows.length ? h('div', { class: 'card flush' }, h('div', { class: 'tbl-wrap' }, h('table', { class: 'tbl tests' },
+    h('thead', {}, h('tr', {}, h('th', {}, 'Policy / site'), TESTS.map(t => h('th', { class: 't' }, t.l)), h('th', {}, 'Reasoning'), h('th', {}, ''))),
+    h('tbody', {}, rows.map(r => h('tr', {},
+      h('td', { style: 'min-width:190px' }, h('input', { class: 'cell mono', id: 'sref-' + r.id, value: r.ref || '', placeholder: 'Policy ref', onchange: e => Store.put(r.id, { ...r, ref: e.target.value }) }), h('input', { class: 'cell', id: 'stitle-' + r.id, value: r.title || '', placeholder: 'Title', onchange: e => Store.put(r.id, { ...r, title: e.target.value }) }), exPill(r)),
+      TESTS.map(t => { const v = (r.t || {})[t.k] || ''; return h('td', {}, h('div', { class: 'tcell' }, h('button', { class: 'tchip ' + v, title: 'Click to change', onclick: () => { const nx = TSTATES[(TSTATES.indexOf(v) + 1) % TSTATES.length]; Store.put(r.id, { ...r, t: { ...(r.t || {}), [t.k]: nx } }); render(); } }, v ? TLABEL[v] : '—'))); }),
+      h('td', { style: 'min-width:260px' }, h('textarea', { class: 'cell', id: 'snote-' + r.id, rows: 2, value: r.notes || '', placeholder: 'Reasons, evidence, possible MMs', onchange: e => Store.put(r.id, { ...r, notes: e.target.value }) }), S.sndAI && S.sndAI.id === r.id ? sndAIView(r) : null),
+      h('td', { style: 'white-space:nowrap' }, h('button', { class: 'btn sm', onclick: () => assessRow(r.id), title: 'Claude reviews the library against each test' }, icon('spark', 13), 'Assess'), h('button', { class: 'btn ghost sm danger', 'aria-label': 'Delete row', onclick: async () => { if (await confirmBox('Delete this row?', 'The assessment for ' + (r.ref || 'this policy') + ' will be removed.')) { Store.del(r.id); render(); } } }, '✕'))))))))
+    : h('div', { class: 'card empty' }, h('h3', {}, 'No policies assessed yet'), h('div', {}, 'Add a row for each policy or site allocation you are testing.'));
+  const legend = h('div', { class: 'row small muted' }, 'Click a cell to cycle:', TSTATES.map(s => h('span', { class: 'tchip ' + s, style: 'cursor:default;min-width:0' }, s ? TLABEL[s] : '—')), h('span', {}, 'Legal compliance includes the duty to cooperate, SA and HRA.'));
+  return [pageHead('Examination', 'Soundness tests', 'A working matrix of the legal compliance and soundness tests for each policy and allocation. Claude can review the library against each test and suggest a view with citations; you decide.', h('button', { class: 'btn primary', onclick: async () => { const id = rid('snd_'); await Store.put(id, { kind: 'snd', ref: '', title: '', t: {}, notes: '' }); render(); setTimeout(() => { const el = document.getElementById('sref-' + id); el && el.focus(); }, 30); } }, '+ Add policy or site')), legend, tbl];
+};
+function sndAIView(r) {
+  const a = S.sndAI;
+  return h('div', { class: 'stack', style: 'margin-top:8px;gap:6px', id: 'sndai' },
+    a.status === 'running' ? h('div', { class: 'thinking small' }, h('span', { class: 'pulse' }), a.phase || 'Reviewing the library…') : null,
+    a.error ? h('div', { class: 'notice bad small' }, a.error) : null,
+    a.result ? h('div', { class: 'stack small', style: 'gap:6px' }, TESTS.map(t => { const x = a.result[t.k] || {}; return h('div', {}, h('span', { class: 'tchip ' + (TSTATES.includes(x.status) ? x.status : ''), style: 'cursor:default;min-width:0;margin-right:6px' }, t.s + ': ' + (TLABEL[x.status] || 'Unclear')), inline(String(x.reason || ''))); }),
+      a.result.summary ? h('div', { class: 'muted' }, inline(String(a.result.summary))) : null,
+      h('div', { class: 'row' }, h('button', { class: 'btn sm primary', onclick: () => applyAssess(r.id) }, 'Apply suggestions'), h('button', { class: 'btn sm ghost', onclick: () => { S.sndAI = null; render(); } }, 'Dismiss'))) : null);
+}
+async function assessRow(id) {
+  const r = S.items.get(id); if (!r.ref && !r.title) return toast('Give the row a policy reference or title first.');
+  if (!all('doc').length) return toast('Add documents to the library first.');
+  S.sndAI = { id, status: 'running' }; render();
+  const sample = await ensureSample(); if (!sample) { S.sndAI.error = 'Claude is not available in this view.'; S.sndAI.status = 'error'; return render(); }
+  await loadAllTexts(); buildIndex();
+  const paint = () => { const el = document.getElementById('sndai'); if (el) el.replaceWith(sndAIView(S.items.get(id))); };
+  const log = s => { S.sndAI.phase = s; paint(); };
+  const prompt = LIB_RULES('analyse') + '\n\nLibrary catalogue:\n' + catalogue() + `\n\nAssess ${r.ref || ''} ${r.title || ''} against the legal compliance requirements (including the duty to cooperate, SA/SEA, HRA and the regulations) and the tests of soundness in the NPPF (positively prepared, justified, effective, consistent with national policy). Read the policy text, its reasoned justification and the evidence base behind it, and test the evidence's method and assumptions. Use the library: the policy text, its supporting evidence, the Council's responses and the representations. Be cautious: use "concern" where evidence is thin or contested, "unsound" only where the evidence clearly shows a failing, "ok" where the evidence supports the policy, and "unknown" where the library is silent.${r.notes ? '\nThe inspector\'s notes so far: ' + r.notes : ''}
+Reply with only a JSON object: {"legal":{"status":"ok|concern|unsound|unknown","reason":"one or two sentences with [[D3 p.12]] citations"},"pp":{...},"just":{...},"eff":{...},"cons":{...},"summary":"one or two sentences, ending with your confidence (high, medium or low) and the main thing that could change it"}`;
+  try {
+    S.sndAI.ctl = new AbortController();
+    S.sndAI.result = await sample.json(prompt, { ...(CAP.tools ? { tools: libTools(log) } : { cache: false }), ...AI, signal: S.sndAI.ctl.signal });
+    S.sndAI.status = 'done';
+  } catch (e) { S.sndAI.status = 'error'; S.sndAI.error = sampleMsg(e); }
+  render();
+}
+function applyAssess(id) {
+  const r = S.items.get(id); const res = S.sndAI.result; const t = { ...(r.t || {}) };
+  for (const x of TESTS) { const st = res[x.k] && res[x.k].status; if (['ok', 'concern', 'unsound'].includes(st)) t[x.k] = st; }
+  const reasons = TESTS.map(x => res[x.k] && res[x.k].reason ? `${x.s}: ${plainCites(res[x.k].reason)}` : null).filter(Boolean).join('\n');
+  Store.put(id, { ...r, t, notes: (r.notes ? r.notes + '\n\n' : '') + 'Claude review (' + fmtDate(todayISO()) + '):\n' + reasons });
+  S.sndAI = null; render(); toast('Suggestions applied. Review and edit the reasoning.');
+}
+
+/* ----- generic editable tables ----- */
+function editTable(rows, cols, onDelete) {
+  return h('div', { class: 'card flush' }, h('div', { class: 'tbl-wrap' }, h('table', { class: 'tbl' },
+    h('thead', {}, h('tr', {}, cols.map(c => h('th', { style: c.w ? 'width:' + c.w : '' }, c.l)), h('th', {}, ''))),
+    h('tbody', {}, rows.map(r => h('tr', {}, cols.map(c => h('td', { style: c.min ? 'min-width:' + c.min : '' }, cellCtl(r, c))), h('td', { style: 'white-space:nowrap;padding-top:8px' }, exPill(r), h('button', { class: 'btn ghost sm danger', 'aria-label': 'Delete row', onclick: () => onDelete(r) }, '✕'))))))));
+}
+function cellCtl(r, c) {
+  const id = c.k + '-' + r.id; const save = v => Store.put(r.id, { ...S.items.get(r.id), [c.k]: v });
+  if (c.t === 'select') return h('select', { class: 'cell', id, onchange: e => { save(e.target.value); render(); } }, c.o.map(o => h('option', { value: o, selected: (r[c.k] || c.o[0]) === o }, o)));
+  if (c.t === 'textarea') return h('textarea', { class: 'cell', id, rows: 2, value: r[c.k] || '', placeholder: c.p || '', onchange: e => save(e.target.value) });
+  if (c.t === 'date') return h('input', { class: 'cell', id, type: 'date', value: r[c.k] || '', onchange: e => { save(e.target.value); } });
+  return h('input', { class: 'cell' + (c.mono ? ' mono' : ''), id, value: r[c.k] || '', placeholder: c.p || '', onchange: e => save(e.target.value) });
+}
+async function addRow(kind, defaults, focusKey) { const id = rid(kind + '_'); await Store.put(id, { kind, ...defaults, createdAt: Date.now() }); render(); setTimeout(() => { const el = document.getElementById(focusKey + '-' + id); el && el.focus(); }, 30); }
+const delRow = what => async r => { if (await confirmBox('Delete this ' + what + '?', 'This cannot be undone.')) { Store.del(r.id); render(); } };
+
+/* ----- MIQs ----- */
+const MIQ_STATUS = ['Draft', 'Issued', 'Responses received', 'Discussed', 'Closed'];
+VIEW_FN.miqs = () => {
+  const rows = all('miq').sort((a, b) => natural(a.matter, b.matter) || natural(a.ref, b.ref));
+  const matters = [...new Set(rows.map(r => r.matter || 'Unassigned'))];
+  const cols = [{ k: 'ref', l: 'Ref', w: '80px', mono: true, p: '3.1' }, { k: 'issue', l: 'Issue', min: '160px', t: 'textarea' }, { k: 'question', l: 'Question', min: '320px', t: 'textarea' }, { k: 'status', l: 'Status', w: '170px', t: 'select', o: MIQ_STATUS }, { k: 'session', l: 'Hearing', w: '150px', t: 'date' }];
+  const gen = S.miqGen;
+  const draftBox = h('div', { class: 'card' }, h('div', { class: 'card-h' }, h('h2', {}, 'Draft questions with Claude'), h('span', { class: 'small muted' }, 'Grounded in the library; you choose which to keep')),
+    h('form', { class: 'row', style: 'flex-wrap:nowrap', onsubmit: e => { e.preventDefault(); const t = $('#miq-topic').value.trim(); if (t) draftMiqs(t); } }, h('input', { class: 'input', id: 'miq-topic', placeholder: 'Matter or topic, e.g. Matter 4: Housing land supply and the trajectory' }), h('button', { class: 'btn primary', type: 'submit' }, 'Draft')),
+    gen ? h('div', { class: 'stack', style: 'margin-top:12px', id: 'miqgen' }, gen.status === 'running' ? h('div', { class: 'thinking' }, h('span', { class: 'pulse' }), gen.phase || 'Reading the library…') : null, gen.error ? h('div', { class: 'notice bad' }, gen.error) : null,
+      gen.items ? [gen.items.map((q, i) => h('label', { class: 'row', style: 'align-items:flex-start;flex-wrap:nowrap;gap:10px' }, h('input', { type: 'checkbox', checked: q.keep !== false, onchange: e => q.keep = e.target.checked, style: 'margin-top:4px' }), h('div', {}, h('div', { class: 'small muted' }, q.issue), h('div', {}, inline(String(q.question)))))),
+        h('div', { class: 'row' }, h('button', { class: 'btn primary sm', onclick: addGenMiqs }, 'Add selected to tracker'), h('button', { class: 'btn ghost sm', onclick: () => { S.miqGen = null; render(); } }, 'Discard'))] : null) : null);
+  return [pageHead('Examination', 'Matters, issues & questions', 'Track each question from drafting to discussion at the hearing.', h('button', { class: 'btn primary', onclick: () => addRow('miq', { matter: matters[matters.length - 1] && matters[0] !== 'Unassigned' ? matters[matters.length - 1] : 'Matter 1', status: 'Draft' }, 'question') }, '+ Add question')), draftBox,
+    rows.length ? matters.map(m => h('div', { class: 'stack' }, h('div', { class: 'row' }, h('input', { class: 'input', style: 'max-width:520px;font-family:var(--f-display);font-size:17px;font-weight:600;border-color:transparent;background:transparent;padding-left:0', value: m, 'aria-label': 'Matter title', id: 'matter-' + m.replace(/\W+/g, '-'), onchange: e => { for (const r of rows.filter(x => (x.matter || 'Unassigned') === m)) Store.put(r.id, { ...r, matter: e.target.value }); } }), h('span', { class: 'small muted' }, plural(rows.filter(x => (x.matter || 'Unassigned') === m).length, 'question'))),
+      editTable(rows.filter(r => (r.matter || 'Unassigned') === m), cols, delRow('question')))) : h('div', { class: 'card empty' }, h('h3', {}, 'No questions yet'), h('div', {}, 'Add questions by hand, or ask Claude to draft some for a matter.'))];
+};
+async function draftMiqs(topic) {
+  if (!all('doc').length) return toast('Add documents to the library first.');
+  S.miqGen = { status: 'running', topic }; render();
+  const sample = await ensureSample(); if (!sample) { S.miqGen.status = 'error'; S.miqGen.error = 'Claude is not available in this view.'; return render(); }
+  await loadAllTexts(); buildIndex();
+  const paint = () => { const el = document.getElementById('miqgen'); if (el) { S.miqGen.phase && (el.querySelector('.thinking') || {}).lastChild && (el.querySelector('.thinking').lastChild.textContent = S.miqGen.phase); } };
+  const prompt = LIB_RULES('analyse') + '\n\nLibrary catalogue:\n' + catalogue() + `\n\n${isNSIP() ? 'Draft the Examining Authority\'s written questions (in the style of ExQ1) on: ' + topic + '.\nRead the application documents, the ES chapters, relevant representations, local impact reports and statements of common ground first. Write 8-14 questions grouped under themes. Each question must be neutral, specific and addressed to named parties, e.g. "[Applicant] Explain how the worst case assumed in ES Chapter 9 …".' : 'Draft matters, issues and questions for the hearing on: ' + topic + '.\nRead the relevant policies, evidence and representations first. Write 8-12 questions grouped under issues. Questions must be neutral, specific and answerable by the Council, in the style of a major local plan examination MIQs document (e.g. "Is the housing requirement justified and consistent with national policy? In particular…"). Probe the evidence: method, assumptions, sensitivity and deliverability.'} Include citations where a question arises from a specific passage.
+Reply with only a JSON array: [{"issue":"Issue 1 - short title (or theme for written questions)","question":"question text with [[D3 p.12]] where relevant"}]`;
+  try { const r = await sample.json(prompt, { ...(CAP.tools ? { tools: libTools(s => { S.miqGen.phase = s; paint(); }) } : { cache: false }), ...AI }); S.miqGen.items = Array.isArray(r) ? r.filter(x => x && x.question) : []; S.miqGen.status = 'done'; if (!S.miqGen.items.length) S.miqGen.error = 'Claude did not return any questions. Try a more specific topic.'; }
+  catch (e) { S.miqGen.status = 'error'; S.miqGen.error = sampleMsg(e); }
+  render();
+}
+async function addGenMiqs() {
+  const g = S.miqGen; const keep = g.items.filter(q => q.keep !== false); const matter = g.topic;
+  const existing = all('miq').filter(r => r.matter === matter).length;
+  for (const [i, q] of keep.entries()) await Store.put(rid('miq_'), { kind: 'miq', matter, ref: String(existing + i + 1), issue: String(q.issue || ''), question: plainCites(String(q.question)), status: 'Draft', createdAt: Date.now() });
+  S.miqGen = null; render(); toast(plural(keep.length, 'question') + ' added as drafts');
+}
+
+/* ----- Actions ----- */
+VIEW_FN.actions = () => {
+  const rows = all('act').sort((a, b) => (a.status === 'Done') - (b.status === 'Done') || natural(a.ref, b.ref));
+  const open = rows.filter(r => r.status !== 'Done'); const overdue = open.filter(r => r.due && daysUntil(r.due) < 0);
+  const cols = [{ k: 'ref', l: 'Ref', w: '80px', mono: true, p: 'AP1' }, { k: 'session', l: 'Session / matter', w: '170px', p: 'Matter 3' }, { k: 'action', l: 'Action', min: '320px', t: 'textarea' }, { k: 'owner', l: 'By', w: '150px', p: 'Council' }, { k: 'due', l: 'Due', w: '150px', t: 'date' }, { k: 'status', l: 'Status', w: '120px', t: 'select', o: ['Open', 'In progress', 'Done'] }];
+  const nextRef = 'AP' + (rows.reduce((m, r) => Math.max(m, parseInt(String(r.ref || '').replace(/\D/g, '')) || 0), 0) + 1);
+  return [pageHead('Examination', 'Hearing actions', 'Action points agreed at the hearing sessions, who owes them and when.', h('button', { class: 'btn primary', onclick: () => addRow('act', { ref: nextRef, status: 'Open' }, 'action') }, '+ Add action')),
+    h('div', { class: 'row' }, h('span', { class: 'pill' }, plural(open.length, 'open action')), overdue.length ? h('span', { class: 'pill bad' }, overdue.length + ' overdue') : h('span', { class: 'pill ok' }, 'None overdue')),
+    rows.length ? editTable(rows, cols, delRow('action')) : h('div', { class: 'card empty' }, h('h3', {}, 'No actions yet'), h('div', {}, 'Record action points as they are agreed at each session.'))];
+};
+
+/* ----- Main modifications ----- */
+VIEW_FN.mods = () => {
+  const rows = all('mm').sort((a, b) => natural(a.ref, b.ref));
+  const cols = [{ k: 'ref', l: 'MM', w: '80px', mono: true, p: 'MM1' }, { k: 'policy', l: 'Policy / para', w: '150px' }, { k: 'change', l: 'Main modification', min: '320px', t: 'textarea', p: 'Use strikethrough wording as text, e.g. delete “…”, insert “…”' }, { k: 'reason', l: 'Reason (soundness)', min: '220px', t: 'textarea' }, { k: 'status', l: 'Status', w: '150px', t: 'select', o: ['Proposed', 'Agreed', 'Consulted', 'Final'] }];
+  const nextRef = 'MM' + (rows.reduce((m, r) => Math.max(m, parseInt(String(r.ref || '').replace(/\D/g, '')) || 0), 0) + 1);
+  return [pageHead('Examination', 'Main modifications', 'The schedule of main modifications needed to make the plan sound, with the reason for each.', h('button', { class: 'btn', onclick: () => { startReport('mm'); } }, 'Schedule as PDF'), h('button', { class: 'btn primary', onclick: () => addRow('mm', { ref: nextRef, status: 'Proposed' }, 'policy') }, '+ Add modification')),
+    rows.length ? editTable(rows, cols, delRow('modification')) : h('div', { class: 'card empty' }, h('h3', {}, 'No main modifications yet'), h('div', {}, 'Add them as they emerge from the hearings; the schedule can be produced as a PDF for consultation.'))];
+};
+
+/* ----- Deadlines ----- */
+VIEW_FN.deadlines = () => {
+  const rows = all('dl').sort((a, b) => String(a.date || '9').localeCompare(String(b.date || '9')));
+  const cols = [{ k: 'date', l: 'Date', w: '160px', t: 'date' }, { k: 'title', l: 'What', min: '280px' }, { k: 'type', l: 'Type', w: '190px', t: 'select', o: ['Hearing session', 'Consultation closes', 'Response due', 'Report milestone', 'Site visit', 'Other'] }];
+  const next = rows.filter(r => r.date && daysUntil(r.date) >= 0);
+  return [pageHead('Examination', 'Deadlines', 'Hearing days, consultation periods, response dates and report milestones.', h('button', { class: 'btn primary', onclick: () => addRow('dl', { date: todayISO(), type: 'Hearing session' }, 'title') }, '+ Add date')),
+    next.length ? h('div', { class: 'row' }, h('span', { class: 'pill acc' }, 'Next: ' + next[0].title + ' · ' + fmtDate(next[0].date) + ' · ' + (daysUntil(next[0].date) === 0 ? 'today' : 'in ' + plural(daysUntil(next[0].date), 'day')))) : null,
+    rows.length ? editTable(rows, cols, delRow('date')) : h('div', { class: 'card empty' }, h('h3', {}, 'No dates yet'), h('div', {}, 'Add the hearing programme and other key dates.'))];
+};
+
+/* ----- Reports & PDFs ----- */
+const TEMPLATES = {
+  letter: { name: 'Letter to the Council', title: 'Letter to the Council', prompt: 'Draft a letter from the Inspector to the Council' },
+  note: { name: 'Inspector\'s note', title: 'Inspector\'s note', prompt: 'Draft an Inspector\'s note for publication on the examination website' },
+  findings: { name: 'Findings briefing', title: 'Findings briefing', prompt: 'Draft an internal briefing summarising the findings so far' },
+  mm: { name: 'Schedule of main modifications', title: 'Schedule of proposed main modifications', prompt: 'Draft a short introduction to the schedule of proposed main modifications for consultation' },
+  digest: { name: 'Examination digest', title: 'Examination progress digest', prompt: 'Draft a progress digest of the examination' },
+  lpreport: { lp: true, name: 'Report on the examination', title: 'Report on the examination', prompt: 'Draft the Inspector\'s report on the examination of the plan under s20(7) of the 2004 Act, with these sections: Non-technical summary; Introduction; Context of the plan; Public sector equality duty; Assessment of the duty to cooperate; Assessment of other aspects of legal compliance (consultation, SA, HRA, climate change, LDS and SCI); Assessment of soundness, one section per main issue, each ending with a reasoned conclusion and the main modifications it needs; Overall conclusion and recommendation. Where findings are not yet in the material, write the structure with [to confirm] placeholders rather than inventing conclusions' },
+  rule6: { nsip: true, name: 'Rule 6 letter', title: 'Rule 6 letter: invitation to the Preliminary Meeting', prompt: 'Draft a letter under rule 6 of the Infrastructure Planning (Examination Procedure) Rules 2010 and s88 of the Planning Act 2008, inviting Interested Parties to the Preliminary Meeting. Cover: the appointment of the Examining Authority; the date, time and arrangements for the Preliminary Meeting with its agenda; the Initial Assessment of Principal Issues; the draft examination timetable; procedural decisions already made; how to take part; and the availability of documents. Use [to confirm] for every date and venue not in the material' },
+  rule8: { nsip: true, name: 'Rule 8 letter', title: 'Rule 8 letter: examination timetable', prompt: 'Draft a letter under rule 8 of the Infrastructure Planning (Examination Procedure) Rules 2010 confirming the examination timetable and procedures after the Preliminary Meeting. Cover: the timetable with deadlines; procedural decisions (including any requests for local impact reports, statements of common ground and written representations); hearings and site inspections; the first written questions; and the close of the six-month examination. Use [to confirm] for any date not in the material' },
+  exq: { nsip: true, numbered: false, name: 'Written questions (ExQ)', title: 'Examining Authority\'s written questions', prompt: 'Draft the Examining Authority\'s written questions. Group them under numbered themes as "## 1. General and cross-topic", "## 2. ..." and so on. Write each question as its own paragraph starting with its reference and addressee in bold, e.g. "**Q1.1.1 [Applicant]** ...". Questions must be neutral, specific and seek evidence, not argument' },
+  recrep: { nsip: true, name: 'Recommendation report', title: 'Recommendation report to the Secretary of State', prompt: 'Draft the Examining Authority\'s recommendation report to the Secretary of State under the Planning Act 2008, with these sections: Introduction; Description of the proposal and the site; Legal and policy context (including the relevant NPS and s104 or s105); Planning issues, one section per principal issue with the evidence, the parties\' positions and the ExA\'s reasoning and conclusion; Habitats Regulations assessment findings for the Secretary of State as competent authority; Conclusion on the case for development consent and the planning balance; Compulsory acquisition and temporary possession (s122 and s123 tests); The draft DCO and related matters; Summary of findings, conclusions and recommendation. Where findings are not in the material, write the structure with [to confirm] placeholders rather than inventing conclusions' }
+};
+const templatesFor = w => Object.entries(TEMPLATES).filter(([k, t]) => w.type === 'nsip' ? (t.nsip || ['note', 'findings', 'digest'].includes(k)) : !t.nsip);
+function startReport(tpl) {
+  const w = ws(); const T = TEMPLATES[tpl] || TEMPLATES.note;
+  S.report = { id: null, tpl, title: T.title, to: tpl === 'letter' ? (w.lpa || '') : '', from: w.inspector || '', date: todayISO(), ref: w.caseRef || '', body: '', numbered: T.numbered !== false && ['letter', 'note', 'lpreport', 'rule6', 'rule8', 'recrep'].includes(tpl), inc: { mm: tpl === 'mm' || tpl === 'digest' || tpl === 'lpreport', act: tpl === 'digest', snd: tpl === 'digest' || tpl === 'findings', miq: false, dl: tpl === 'digest' }, notes: [] };
+  go('reports');
+}
+function startReportFrom(e) { startReport('findings'); S.report.body = e.text; render(); }
+VIEW_FN.reports = () => {
+  const saved = all('report').sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+  if (!S.report) {
+    return [pageHead('Output', 'Reports & PDFs', 'Turn notes, findings and schedules into formatted PDFs with numbered paragraphs, cover details and appendices.'),
+      h('div', { class: 'grid3' }, templatesFor(ws()).map(([k, t]) => h('button', { class: 'card', style: 'text-align:left;cursor:pointer', onclick: () => startReport(k) }, h('h2', {}, t.name), h('div', { class: 'small muted', style: 'margin-top:6px' }, { letter: 'Formal letter with numbered paragraphs, e.g. initial concerns or post-hearing advice.', note: 'A published note, e.g. guidance notes or a note on the hearing programme.', findings: 'An internal briefing drawn from saved findings and the soundness matrix.', mm: 'The main modifications table, ready for consultation.', digest: 'Everything in one document: progress, actions, MMs, soundness and dates.', lpreport: 'The full report structure under s20(7): legal compliance, duty to cooperate, each main issue, recommendation.', rule6: 'Invitation to the Preliminary Meeting with the initial assessment of principal issues and draft timetable.', rule8: 'The confirmed examination timetable and procedural decisions.', exq: 'Written questions grouped by theme, each addressed to named parties.', recrep: 'The recommendation report to the Secretary of State, structured by principal issue.' }[k])))),
+      h('div', { class: 'card' }, h('div', { class: 'card-h' }, h('h2', {}, 'Saved reports')), saved.length ? h('div', { class: 'list' }, saved.map(r => h('div', { class: 'li' }, h('div', { class: 'grow' }, h('div', { style: 'font-weight:600' }, r.title), h('div', { class: 'small muted' }, (TEMPLATES[r.tpl] || {}).name + ' · ' + fmtDate(r.date))), h('button', { class: 'btn sm', onclick: () => { S.report = { ...r, inc: { ...r.inc }, notes: [...(r.notes || [])] }; render(); } }, 'Open'), h('button', { class: 'btn ghost sm danger', onclick: delRow('report') .bind(null, r) }, 'Delete')))) : h('div', { class: 'muted small' }, 'Reports you save appear here.'))];
+  }
+  const R = S.report; const notes = all('note').sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+  const set = patch => { Object.assign(R, patch); };
+  const settings = h('div', { class: 'card stack' },
+    h('h2', {}, (TEMPLATES[R.tpl] || {}).name),
+    h('label', { class: 'f' }, 'Title', h('input', { class: 'input', id: 'r-title', value: R.title, oninput: e => set({ title: e.target.value }) })),
+    h('div', { class: 'grid2', style: 'gap:10px' }, h('label', { class: 'f' }, 'To', h('input', { class: 'input', id: 'r-to', value: R.to, oninput: e => set({ to: e.target.value }) })), h('label', { class: 'f' }, 'From', h('input', { class: 'input', id: 'r-from', value: R.from, oninput: e => set({ from: e.target.value }) })),
+      h('label', { class: 'f' }, 'Date', h('input', { class: 'input', type: 'date', id: 'r-date', value: R.date, oninput: e => set({ date: e.target.value }) })), h('label', { class: 'f' }, 'Reference', h('input', { class: 'input', id: 'r-ref', value: R.ref, oninput: e => set({ ref: e.target.value }) }))),
+    h('label', { class: 'row small' }, h('input', { type: 'checkbox', checked: R.numbered, onchange: e => set({ numbered: e.target.checked }) }), 'Number paragraphs (1, 2, 3…)'),
+    h('div', { class: 'stack', style: 'gap:6px' }, h('h3', {}, 'Appendices'), [['mm', 'Main modifications schedule', all('mm').length], ['act', 'Hearing action points', all('act').length], ['snd', 'Soundness matrix', all('snd').length], ['miq', 'Matters, issues & questions', all('miq').length], ['dl', 'Key dates', all('dl').length]].map(([k, l, n]) =>
+      h('label', { class: 'row small' }, h('input', { type: 'checkbox', checked: !!R.inc[k], onchange: e => R.inc[k] = e.target.checked }), l, h('span', { class: 'muted' }, '(' + n + ')')))),
+    h('div', { class: 'stack', style: 'gap:6px' }, h('h3', {}, 'Draw on these notes'), notes.length ? h('div', { class: 'stack', style: 'gap:4px;max-height:220px;overflow:auto' }, notes.map(n => h('label', { class: 'row small', style: 'flex-wrap:nowrap;align-items:flex-start' }, h('input', { type: 'checkbox', checked: R.notes.includes(n.id), onchange: e => { R.notes = e.target.checked ? [...R.notes, n.id] : R.notes.filter(x => x !== n.id); }, style: 'margin-top:3px' }), h('span', {}, clip(n.title || 'Untitled', 60), ' ', h('span', { class: 'muted' }, n.type === 'finding' ? '· finding' : ''))))) : h('div', { class: 'small muted' }, 'No notes yet.')));
+  const editor = h('div', { class: 'stack', style: 'min-width:0' },
+    h('div', { class: 'card stack' },
+      h('div', { class: 'row', style: 'justify-content:space-between' }, h('h2', {}, 'Body'), h('div', { class: 'row' }, h('button', { class: 'btn', onclick: draftReport }, icon('spark', 14), 'Draft with Claude'), h('button', { class: 'btn ghost', onclick: () => { for (const id of R.notes) { const n = S.items.get(id); if (n) R.body += (R.body ? '\n\n' : '') + '## ' + (n.title || 'Note') + '\n\n' + n.body; } render(); } }, 'Insert selected notes'))),
+      h('div', { id: 'r-status' }, R.status ? h('div', { class: 'thinking' }, h('span', { class: 'pulse' }), R.status) : null),
+      h('textarea', { class: 'textarea', id: 'r-body', rows: 22, value: R.body, oninput: e => set({ body: e.target.value }), placeholder: '## Heading\n\nEach paragraph becomes a numbered paragraph in the PDF.\n\n- Bullets are kept as bullets\n\nCitations like [[D3 p.12]] print as (SD01, p. 12).' })),
+    h('div', { class: 'card row', style: 'justify-content:space-between' }, h('div', { class: 'row' }, h('button', { class: 'btn primary', onclick: () => makePdf('download') }, 'Download PDF'), h('button', { class: 'btn', onclick: () => makePdf('preview') }, 'Preview'), h('button', { class: 'btn', onclick: toClaudeDoc, title: 'Creates an editable document in Claude Docs' }, 'Open as editable doc')),
+      h('div', { class: 'row' }, h('button', { class: 'btn ghost', onclick: () => { S.report = null; render(); } }, 'Close'), h('button', { class: 'btn', onclick: saveReport }, 'Save'))),
+    h('div', { id: 'pdf-preview' }));
+  return [pageHead('Output', R.title || 'Report', 'Edit freely. The PDF adds a cover block, numbered paragraphs, page numbers and the appendices you tick.'), h('div', { class: 'split', style: 'grid-template-columns:320px minmax(0,1fr)' }, settings, editor)];
+};
+async function saveReport() { const R = S.report; const id = R.id || rid('report_'); R.id = id; const { status, ...rest } = R; await Store.put(id, { ...rest, kind: 'report', updatedAt: Date.now() }); toast('Report saved'); }
+async function draftReport() {
+  const R = S.report; const sample = await ensureSample(); if (!sample) return toast('Claude is not available in this view.');
+  const el = () => document.getElementById('r-status');
+  const status = s => { R.status = s; const e = el(); if (e) e.replaceChildren(s ? h('div', { class: 'thinking' }, h('span', { class: 'pulse' }), s) : ''); };
+  status('Drafting…');
+  const notes = R.notes.map(id => S.items.get(id)).filter(Boolean).map(n => `### ${n.title}\n${n.body}`).join('\n\n');
+  const ctx = [R.inc.mm && all('mm').length ? 'Main modifications:\n' + all('mm').sort((a, b) => natural(a.ref, b.ref)).map(m => `${m.ref} (${m.policy}): ${m.change} | reason: ${m.reason} | ${m.status}`).join('\n') : '',
+    R.inc.snd && all('snd').length ? 'Soundness matrix:\n' + all('snd').map(r => `${r.ref} ${r.title}: ` + TESTS.map(t => t.s + '=' + (TLABEL[(r.t || {})[t.k] || ''])).join(', ') + (r.notes ? ' | ' + r.notes : '')).join('\n') : '',
+    R.inc.act && all('act').length ? 'Actions:\n' + all('act').map(a => `${a.ref} ${a.action} (${a.owner}, due ${a.due}, ${a.status})`).join('\n') : ''].filter(Boolean).join('\n\n');
+  const prompt = `${EXPERT()}
+
+You draft documents for this examination. ${wsContext()}
+${(TEMPLATES[R.tpl] || TEMPLATES.note).prompt} titled "${R.title}"${R.to ? ', addressed to ' + R.to : ''}.
+Style: formal, courteous, plain UK English, as used in Planning Inspectorate correspondence and reports. Leave out the Confidence and limits section from the document itself; instead put anything you could not verify in square brackets as [to confirm: ...]. Write in the first person as the Inspector. Short paragraphs, each making one point (they will be numbered automatically, so do not number them). Use "## " headings for sections. Do not add a salutation block, address, date or signature: the PDF adds those. Keep any [[D3 p.12]] citations from the material. Do not invent facts, dates or figures that are not in the material; where something is needed, write [to confirm].
+${R.body.trim() ? '\nCurrent draft to improve and complete:\n' + R.body.slice(0, 40000) : ''}
+${notes ? '\nNotes and findings to draw on:\n' + notes.slice(0, 80000) : ''}
+${ctx ? '\nExamination records:\n' + ctx.slice(0, 40000) : ''}
+Return only the body text in Markdown.`;
+  try { const r = await sample(prompt, { ...AI, cache: false, onText: ({ text }) => { R.body = text; const ta = document.getElementById('r-body'); if (ta) ta.value = text; status('Writing…'); } }); R.body = r.text; status(''); render(); }
+  catch (e) { status(''); if (e.text) R.body = e.text; render(); toast(sampleMsg(e)); }
+}
+async function toClaudeDoc() {
+  const R = S.report; if (CAP.mcp === undefined) CAP.mcp = await use('mcp'); if (!CAP.mcp) return toast('Editable documents are not available in this view.');
+  let md = `# ${R.title}\n\n` + [R.to ? '**To:** ' + R.to : '', R.from ? '**From:** ' + R.from : '', R.date ? '**Date:** ' + fmtDate(R.date) : '', R.ref ? '**Ref:** ' + R.ref : ''].filter(Boolean).join('  \n') + '\n\n' + plainCites(R.body);
+  while (new TextEncoder().encode(md).length > 31000) md = md.slice(0, Math.floor(md.length * .9));
+  const name = (R.title || 'Report').replace(/[\u0000-\u001f\u007f-\u009f\u200b\u2028\u2029]/g, ' ').slice(0, 190);
+  try { const r = await CAP.mcp.callTool('Claude Docs', 'batch', { container: { kind: 'project', create: { name, doc: { markdown: md } } }, batch: [] }); const url = r.payload && r.payload.url; toast('Editable document created'); if (url && /^https:\/\//.test(url)) { const p = $('#pdf-preview'); p && p.replaceChildren(h('div', { class: 'notice' }, h('span', { style: 'flex:1' }, 'Document created.'), h('a', { class: 'btn sm primary', href: url, target: '_blank', rel: 'noopener' }, 'Open document'))); } }
+  catch (e) { toast(e.code === 'approval_required' ? 'Creating a document needs your approval. Try again and choose Allow.' : e.code === 'tool_error' && e.result && e.result.structuredContent ? 'Nothing was created: ' + e.result.structuredContent.reason : 'The document could not be created (' + e.code + '). Check Claude Docs before trying again.'); }
+}
+
+/* ---------- PDF generation ---------- */
+const pdfSafe = s => String(s || '').replace(/[‘’‚′]/g, "'").replace(/[“”„″]/g, '"').replace(/[–—]/g, '-').replace(/…/g, '...').replace(/[•●▪]/g, '-').replace(/ /g, ' ').replace(/[^\x09\x0A\x0D\x20-\x7E\xA0-\xFF]/g, '');
+const stripInline = s => pdfSafe(plainCites(s).replace(/\*\*([^*]+)\*\*/g, '$1').replace(/(?<![\w*])\*([^*\s][^*]*)\*(?!\w)/g, '$1').replace(/`([^`]+)`/g, '$1'));
+async function buildPdf(R) {
+  await loadScript(LIBS.jspdf); let auto = true; try { await loadScript(LIBS.autotable); } catch { auto = false; }
+  const { jsPDF } = window.jspdf; const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+  if (!doc.autoTable) auto = false;
+  const W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight(), M = 62, CW = W - 2 * M; let y = M; let para = 0;
+  const ACC = [43, 90, 75], INK = [27, 36, 32], MUTE = [110, 120, 115];
+  const ensure = hh => { if (y + hh > H - M) { doc.addPage(); y = M; } };
+  const text = (t, { size = 10.5, style = 'normal', font = 'helvetica', color = INK, indent = 0, lh = 1.45, num = null, gap = 6 } = {}) => {
+    doc.setFont(font, style); doc.setFontSize(size); doc.setTextColor(...color);
+    const lines = doc.splitTextToSize(t, CW - indent); const step = size * lh;
+    lines.forEach((ln, i) => { ensure(step); if (i === 0 && num != null) { doc.setTextColor(...MUTE); doc.text(String(num) + (typeof num === 'number' ? '.' : ''), M, y); doc.setTextColor(...color); } doc.text(ln, M + indent, y); y += step; });
+    y += gap;
+  };
+  const w = ws();
+  // cover block
+  doc.setFillColor(...ACC); doc.rect(M, y - 14, 34, 3, 'F');
+  text(pdfSafe((w.plan ? (w.type === 'nsip' ? 'Examination of the application for ' : 'Examination of the ') + w.plan : (w.type === 'nsip' ? 'NSIP examination' : 'Local plan examination'))).toUpperCase(), { size: 8.5, style: 'bold', color: ACC, gap: 4 });
+  text(pdfSafe(R.title || 'Report'), { size: 21, font: 'times', style: 'bold', lh: 1.2, gap: 10 });
+  const meta = [['To', R.to], ['From', R.from ? R.from + (R.from && w.inspector === R.from ? ' (Inspector)' : '') : ''], ['Date', R.date ? fmtDate(R.date, { day: 'numeric', month: 'long', year: 'numeric' }) : ''], ['Reference', R.ref]].filter(x => x[1]);
+  for (const [k, v] of meta) { ensure(15); doc.setFont('helvetica', 'bold'); doc.setFontSize(9.5); doc.setTextColor(...MUTE); doc.text(k, M, y); doc.setFont('helvetica', 'normal'); doc.setTextColor(...INK); doc.text(pdfSafe(v), M + 70, y); y += 15; }
+  y += 6; doc.setDrawColor(200, 206, 200); doc.setLineWidth(.6); doc.line(M, y, W - M, y); y += 24;
+  // body
+  const lines = String(R.body || '').replace(/\r/g, '').split('\n'); let i = 0;
+  const isList = l => /^\s*([-*•]|\d+[.)])\s+/.test(l);
+  while (i < lines.length) {
+    const l = lines[i]; let m;
+    if (!l.trim()) { i++; continue; }
+    if ((m = l.match(/^(#{1,4})\s+(.*)/))) { y += 6; ensure(40); text(stripInline(m[2]), { size: m[1].length <= 2 ? 13.5 : 11.5, font: 'times', style: 'bold', color: m[1].length <= 2 ? ACC : INK, gap: 6, lh: 1.25 }); i++; continue; }
+    if (/^\s*\|/.test(l)) { const rows = []; while (i < lines.length && /^\s*\|/.test(lines[i])) rows.push(lines[i++]); const cells = r => r.trim().replace(/^\||\|$/g, '').split('|').map(c => stripInline(c.trim())); const body = rows.filter(r => !/^\s*\|?\s*:?-{2,}/.test(r)).map(cells); if (body.length) table(body[0], body.slice(1)); continue; }
+    if (isList(l)) { while (i < lines.length && isList(lines[i])) { const ord = lines[i].match(/^\s*(\d+)[.)]/); text(stripInline(lines[i].replace(/^\s*([-*•]|\d+[.)])\s+/, '')), { indent: R.numbered ? 42 : 16, num: null, gap: 3 }); const yy = y; i++; } y += 4; continue; }
+    const p = []; while (i < lines.length && lines[i].trim() && !/^(#{1,4}\s|\s*\|)/.test(lines[i]) && !isList(lines[i])) p.push(lines[i++].replace(/^>\s?/, ''));
+    const t = stripInline(p.join(' '));
+    if (R.numbered) text(t, { indent: 28, num: ++para, gap: 8 }); else text(t, { gap: 8 });
+  }
+  function table(head, rows) {
+    if (auto) { doc.autoTable({ head: [head], body: rows, startY: y, margin: { left: M, right: M, top: M, bottom: M }, styles: { font: 'helvetica', fontSize: 8.5, cellPadding: 5, textColor: INK, lineColor: [215, 220, 214], lineWidth: .5, valign: 'top', overflow: 'linebreak' }, headStyles: { fillColor: ACC, textColor: 255, fontStyle: 'bold' }, alternateRowStyles: { fillColor: [246, 248, 245] } }); y = doc.lastAutoTable.finalY + 18; }
+    else { for (const r of rows) text(head.map((hh, j) => hh + ': ' + (r[j] || '')).join(' | '), { size: 9, gap: 4 }); y += 8; }
+  }
+  const appendix = (title, head, rows) => { if (!rows.length) return; doc.addPage(); y = M; text('APPENDIX', { size: 8.5, style: 'bold', color: ACC, gap: 2 }); text(pdfSafe(title), { size: 16, font: 'times', style: 'bold', gap: 12, lh: 1.2 }); table(head, rows.map(r => r.map(c => pdfSafe(plainCites(c || ''))))); };
+  if (R.inc.mm) appendix('Schedule of main modifications', ['Ref', 'Policy / para', 'Main modification', 'Reason', 'Status'], all('mm').sort((a, b) => natural(a.ref, b.ref)).map(m => [m.ref, m.policy, m.change, m.reason, m.status]));
+  if (R.inc.act) appendix('Hearing action points', ['Ref', 'Session', 'Action', 'By', 'Due', 'Status'], all('act').sort((a, b) => natural(a.ref, b.ref)).map(a => [a.ref, a.session, a.action, a.owner, a.due ? fmtDate(a.due) : '', a.status]));
+  if (R.inc.snd) appendix('Legal compliance and soundness', ['Policy / site', ...TESTS.map(t => t.s), 'Reasoning'], all('snd').sort((a, b) => natural(a.ref, b.ref)).map(r => [(r.ref || '') + ' ' + (r.title || ''), ...TESTS.map(t => TLABEL[(r.t || {})[t.k] || ''] === 'Not assessed' ? '-' : TLABEL[(r.t || {})[t.k] || '']), r.notes]));
+  if (R.inc.miq) appendix('Matters, issues and questions', ['Matter', 'Ref', 'Issue', 'Question', 'Status'], all('miq').sort((a, b) => natural(a.matter, b.matter) || natural(a.ref, b.ref)).map(q => [q.matter, q.ref, q.issue, q.question, q.status]));
+  if (R.inc.dl) appendix('Key dates', ['Date', 'What', 'Type'], all('dl').sort((a, b) => String(a.date).localeCompare(String(b.date))).map(d => [d.date ? fmtDate(d.date) : '', d.title, d.type]));
+  const n = doc.getNumberOfPages();
+  for (let p = 1; p <= n; p++) { doc.setPage(p); doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(...MUTE); doc.text(pdfSafe(clip(w.plan ? w.plan + ' examination' : R.title, 80)), M, H - 30); doc.text('Page ' + p + ' of ' + n, W - M, H - 30, { align: 'right' }); }
+  return doc.output('blob');
+}
+async function makePdf(mode) {
+  const R = S.report; let blob;
+  try { toast('Building PDF…'); blob = await buildPdf(R); } catch (e) { return toast(e && e.message ? e.message : 'The PDF could not be built.'); }
+  const fname = (R.title || 'report').replace(/[^\w\- ]+/g, '').trim().replace(/\s+/g, '-').slice(0, 60) + '-' + (R.date || todayISO()) + '.pdf';
+  if (mode === 'preview') { const url = URL.createObjectURL(blob); const p = $('#pdf-preview'); p && p.replaceChildren(h('div', { class: 'card stack' }, h('div', { class: 'row', style: 'justify-content:space-between' }, h('h3', {}, 'Preview'), h('span', { class: 'small muted' }, fmtBytes(blob.size))), h('iframe', { class: 'pdf-frame', src: url, title: 'PDF preview' }))); p && p.scrollIntoView({ behavior: 'smooth' }); return; }
+  if (CAP.downloads === undefined) CAP.downloads = await use('downloads');
+  if (!CAP.downloads) return toast('Downloads are not available in this view. Open the page in Claude to save files.');
+  try { await CAP.downloads.save({ filename: fname, data: blob }); toast('Saved ' + fname); } catch (e) { toast(e.code === 'declined' ? 'Download cancelled.' : 'The download did not complete (' + e.code + ').'); }
+}
+
+/* ---------- example data ---------- */
+async function seedExamples() {
+  const d = n => { const x = new Date(); x.setDate(x.getDate() + n); return x.toISOString().slice(0, 10); };
+  const w = ws();
+  if (!w.plan) await putWs({ plan: 'Harrowfield District Local Plan 2024–2041 (example)', lpa: 'Harrowfield District Council', caseRef: 'EX/LP/0000', inspector: '', stage: 3, submitted: d(-120) });
+  const rows = [
+    { kind: 'dl', date: d(9), title: 'Hearing session: Matter 3, housing requirement', type: 'Hearing session' },
+    { kind: 'dl', date: d(10), title: 'Hearing session: Matter 4, housing land supply', type: 'Hearing session' },
+    { kind: 'dl', date: d(4), title: 'Council response to action points from week 1', type: 'Response due' },
+    { kind: 'dl', date: d(52), title: 'Main modifications consultation closes', type: 'Consultation closes' },
+    { kind: 'miq', matter: 'Matter 3: Housing need and requirement', ref: '3.1', issue: 'Issue 1: Local housing need', question: 'Is the use of the standard method justified, and are there exceptional circumstances for an alternative approach?', status: 'Issued', session: d(9) },
+    { kind: 'miq', matter: 'Matter 3: Housing need and requirement', ref: '3.2', issue: 'Issue 2: Unmet need', question: 'How has unmet need from neighbouring authorities been considered through the duty to cooperate?', status: 'Responses received', session: d(9) },
+    { kind: 'miq', matter: 'Matter 4: Housing land supply', ref: '4.1', issue: 'Issue 1: Trajectory', question: 'Is the housing trajectory realistic, particularly the delivery rates assumed on the strategic sites?', status: 'Draft' },
+    { kind: 'act', ref: 'AP1', session: 'Matter 2', action: 'Council to provide an updated Statement of Common Ground with the County Council on education capacity.', owner: 'Council', due: d(4), status: 'Open' },
+    { kind: 'act', ref: 'AP2', session: 'Matter 2', action: 'Council to suggest wording to clarify the threshold in Policy H4 (affordable housing).', owner: 'Council', due: d(-2), status: 'Open' },
+    { kind: 'act', ref: 'AP3', session: 'Matter 1', action: 'Confirm the HRA addendum has been published on the examination website.', owner: 'Programme officer', due: d(-10), status: 'Done' },
+    { kind: 'mm', ref: 'MM1', policy: 'Policy SP2', change: 'Replace "around 9,800 dwellings" with "at least 9,800 dwellings (575 dwellings per annum)".', reason: 'To be positively prepared and consistent with national policy.', status: 'Proposed' },
+    { kind: 'mm', ref: 'MM2', policy: 'Policy H4', change: 'Delete "where viable" and insert a clear 30% requirement on sites of 10 or more dwellings, with viability review criteria.', reason: 'To be effective and justified by the viability evidence.', status: 'Agreed' },
+    { kind: 'snd', ref: 'SP2', title: 'Housing requirement', t: { legal: 'ok', pp: 'concern', just: 'concern', eff: 'ok', cons: '' }, notes: 'Requirement below standard method figure in early years; stepped trajectory needs justification.' },
+    { kind: 'snd', ref: 'H4', title: 'Affordable housing', t: { legal: 'ok', pp: 'ok', just: 'ok', eff: 'unsound', cons: 'concern' }, notes: '"Where viable" makes the policy ineffective; MM2 proposed.' },
+    { kind: 'snd', ref: 'SA7', title: 'Land north of Millbrook', t: { legal: 'ok', pp: 'ok', just: 'concern', eff: 'concern', cons: 'ok' }, notes: 'Flood zone 2 edge; sequential test evidence to be checked.' },
+    { kind: 'note', type: 'note', title: 'Initial thoughts on the spatial strategy', body: '## Points to probe\n\n- Distribution relies heavily on two strategic sites in the north of the district.\n- Delivery rates assumed in years 1–5 look optimistic compared with recent completions.\n- Check whether the SA tested a more dispersed option.\n\nThese are working notes for the example examination.', matter: 'Matter 2', updatedAt: Date.now() - 86400000 }
+  ];
+  for (const r of rows) await Store.put(rid(r.kind + '_'), { ...r, example: true, createdAt: Date.now() });
+  render(); toast('Example examination loaded. Each record is marked “Example”.');
+}
+async function clearExamples() {
+  if (!await confirmBox('Remove example records?', 'All records marked “Example” will be deleted. Your own records stay.', 'Remove')) return;
+  for (const r of [...S.items.values()]) if (r.example) await Store.del(r.id);
+  const w = ws(); if (/\(example\)/.test(w.plan || '')) await putWs({ plan: '', lpa: '', caseRef: '', submitted: '', stage: 0 });
+  render(); toast('Examples removed');
+}
+
+/* ---------- boot ---------- */
+(function boot() {
+  const v = location.hash.slice(1); if (VIEW_FN[v]) S.view = v;
+  $('#brand-mark').innerHTML = badgeSVG(36);
+  render();
+  Store.init();
+  use('assets').then(a => { CAP.assets = a; renderConn(); });
+  use('sample').then(s => { CAP.sample = s; if (s) s.limits().then(l => { CAP.tools = !!l.tools; }).catch(() => { CAP.tools = null; }); renderConn(); });
+  use('mcp').then(m => { CAP.mcp = m; renderConn(); });
+})();
+</script>
+
+</body></html>
